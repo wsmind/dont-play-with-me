@@ -20,14 +20,13 @@ end
 function love.keypressed(key, unicode)
 	if key == "escape" then
 		love.event.push("quit")
-    elseif key == "r" then
-        --game:reset()
-    elseif key == " " then
-        --game:togglePause()
+    else
+		game:keyPressed(key, unicode)
 	end
 end
 
 function love.keyreleased(key, unicode)
+	game:keyReleased(key, unicode)
 end
 
 function love.update(dt)

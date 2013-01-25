@@ -34,6 +34,14 @@ end
 function Game:mouseReleased(x, y, button)
 end
 
+function Game:keyPressed(key, unicode)
+	self.pressed = true
+end
+
+function Game:keyReleased(key, unicode)
+	self.pressed = false
+end
+
 function Game:update(dt)
 end
 
@@ -53,6 +61,14 @@ function Game:draw()
 	--local screenExtent = vec2(self.virtualScreenHeight * self.screenRatio, self.virtualScreenHeight)
 	--local cameraBounds = aabb(self.camera - screenExtent, self.camera + screenExtent)
     --self.map:draw(cameraBounds)
+	
+	-- draw blocks
+	love.graphics.rectangle("fill", 0, 0, 100, 50)
+	
+	-- draw cool pressed stuff
+	if self.pressed then
+		love.graphics.rectangle("fill", -200, 0, 100, 50)
+	end
 	
 	-- reset camera transform before hud drawing
 	love.graphics.pop()
