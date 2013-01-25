@@ -4,6 +4,7 @@ Copyright (c) 2012 Aurélien Defossez, Jean-Marie Comets, Anis Benyoub, Rémi Papi
 ]]
 
 require("math.vec2")
+require("game.Block")
 
 Game = {}
 Game.__index = Game
@@ -25,6 +26,16 @@ function Game.new(options)
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
     --love.audio.play(music)
 	
+	self.blocks = {}
+	for i = 20, 200 do
+		local block = Block.new{
+			x = i * 25,
+			width = 25,
+			height = math.random(500)
+		}
+		table.insert(self.blocks, block)
+	end
+	
     return self
 end
 
@@ -43,6 +54,9 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
+	for _, block in ipairs(self.blocks) do
+		block:update(dt)
+	end
 end
 
 function Game:draw()
@@ -63,11 +77,13 @@ function Game:draw()
     --self.map:draw(cameraBounds)
 	
 	-- draw blocks
-	love.graphics.rectangle("fill", 0, 0, 100, 50)
+	for _, block in ipairs(self.blocks) do
+		block:draw()
+	end
 	
 	-- draw cool pressed stuff
 	if self.pressed then
-		love.graphics.rectangle("fill", -200, 0, 100, 50)
+		love.graphics.rectangle("fill", -200, 0, 100, 1080 / 2)
 	end
 	
 	-- reset camera transform before hud drawing
