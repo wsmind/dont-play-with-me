@@ -5,6 +5,8 @@ Copyright (c) 2012 Aurélien Defossez, Jean-Marie Comets, Anis Benyoub, Rémi Papi
 
 require("math.vec2")
 require("game.Block")
+require("game.Config")
+require("game.Hero")
 
 Game = {}
 Game.__index = Game
@@ -22,6 +24,11 @@ function Game.new(options)
 	
     self.camera = vec2(0, 0)
 	self.zoom = 1.0
+	
+	-- hero stuff
+	self.hero = Hero:new{}
+	self.heroMovesLeft = false
+	self.heroMovesRight = false
 	
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
     --love.audio.play(music)
@@ -46,14 +53,36 @@ function Game:mouseReleased(x, y, button)
 end
 
 function Game:keyPressed(key, unicode)
-	self.pressed = true
+	-- hero movement
+	if key == "left" then
+		self.heroMovesLeft = true
+	elseif key == "right" then
+		self.heroMovesRight = true
+	end
 end
 
 function Game:keyReleased(key, unicode)
-	self.pressed = false
+	-- hero movement
+	if key == "left" then
+		self.heroMovesLeft = false
+	elseif key == "right" then
+		self.heroMovesRight = false
+	end
 end
 
 function Game:update(dt)
+	-- updates hero
+	local heroTotalMove = vec2(0,0)
+	if self.heroMovesLeft then
+		heroTotalMove = heroTotalMove - Config.heroHorizontalSpeed
+	end	
+	if self.heroMovesRight then
+		heroTotalMove = heroTotalMove + Config.heroHorizontalSpeed
+	end
+	self.hero:move(heroTotalMove)
+	self.hero:update(dt)
+	
+	-- blocks
 	for _, block in ipairs(self.blocks) do
 		block:update(dt)
 	end
@@ -76,14 +105,12 @@ function Game:draw()
 	--local cameraBounds = aabb(self.camera - screenExtent, self.camera + screenExtent)
     --self.map:draw(cameraBounds)
 	
+	-- draw hero
+	self.hero:draw()
+	
 	-- draw blocks
 	for _, block in ipairs(self.blocks) do
 		block:draw()
-	end
-	
-	-- draw cool pressed stuff
-	if self.pressed then
-		love.graphics.rectangle("fill", -200, 0, 100, 1080 / 2)
 	end
 	
 	-- reset camera transform before hud drawing
