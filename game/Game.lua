@@ -97,9 +97,19 @@ function Game:update(dt)
 	self.hero:move(heroTotalMove)
 	self.hero:update(dt)
 	
+	self.collision = false
+	self.heroAABB = aabb(self.hero.pos, self.hero.pos + vec2(60, 120))
+	
 	-- blocks
 	for _, block in ipairs(self.blocks) do
 		block:update(dt)
+		
+		local collisionInfo = block:collide(self.heroAABB)
+		if collisionInfo then
+			self.collision = true
+			self.hero.pos = self.hero.pos + collisionInfo.normal * collisionInfo.depth
+			self.heroAABB = aabb(self.hero.pos, self.hero.pos + vec2(60, 120))
+		end
 	end
 end
 
@@ -121,7 +131,13 @@ function Game:draw()
     --self.map:draw(cameraBounds)
 	
 	-- draw hero
+	if self.collision then
+		love.graphics.setColor(255, 0, 0, 255)
+	else
+		love.graphics.setColor(255, 0, 255, 255)
+	end
 	self.hero:draw()
+	self.heroAABB:draw(255, 255, 255, 255)
 	
 	-- draw blocks
 	for _, block in ipairs(self.blocks) do
