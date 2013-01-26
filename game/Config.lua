@@ -34,7 +34,7 @@ Config = {
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
 	excitedColor = vec4(220, 16, 20, 255),
-	cBlank = {0,0,0,255},
+	cBlank = vec4(0,0,0,255),
 	
 	-- Camera
 	cameraShakeAmplitude = 20,
