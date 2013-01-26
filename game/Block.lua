@@ -33,5 +33,5 @@ function Block:draw()
 	love.graphics.setColor(255, 255, 0, 255)
 	love.graphics.rectangle("fill", self.x - self.width * 0.5, 540 - self.height, self.width, self.height)
 	
-	self.aabb:draw(255, 255, 255, 255)
+	self.aabb:drawDebug(255, 255, 255, 255)
 end

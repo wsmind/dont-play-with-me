@@ -37,9 +37,9 @@ function Game.new(options)
 	self.blocks = {}
 	for i = 20, 200 do
 		local block = Block.new{
-			x = i * 25,
-			width = 25,
-			height = math.random(500)
+			x = i * 40,
+			width = 40,
+			height = math.random(200)
 		}
 		table.insert(self.blocks, block)
 	end
@@ -61,7 +61,7 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesRight = true
 	elseif key == "up" and not self.heroInPostJumping then
 		self.heroInPostJumping = true
-		self.hero:jump(Config.heroVerticalSpeed)
+		self.hero:jump()
 	end
 end
 
@@ -91,17 +91,16 @@ function Game:update(dt)
 	self.hero:update(dt)
 	
 	self.collision = false
-	self.heroAABB = aabb(self.hero.pos, self.hero.pos + vec2(60, 120))
 	
 	-- blocks
 	for _, block in ipairs(self.blocks) do
 		block:update(dt)
 		
-		local collisionInfo = block:collide(self.heroAABB)
+		local collisionInfo = block:collide(self.hero:getBounds())
 		if collisionInfo then
 			self.collision = true
-			self.hero.pos = self.hero.pos + collisionInfo.normal * collisionInfo.depth
-			self.heroAABB = aabb(self.hero.pos, self.hero.pos + vec2(60, 120))
+			--self.hero.pos = self.hero.pos + collisionInfo.normal * collisionInfo.depth
+			self.hero:handleCollision(collisionInfo)
 		end
 	end
 end
@@ -130,7 +129,6 @@ function Game:draw()
 		love.graphics.setColor(255, 0, 255, 255)
 	end
 	self.hero:draw()
-	self.heroAABB:draw(255, 255, 255, 255)
 	
 	-- draw blocks
 	for _, block in ipairs(self.blocks) do
@@ -141,6 +139,11 @@ function Game:draw()
 	love.graphics.pop()
 	
 	-- HUD
+	if self.hero.grounded then
+		love.graphics.setColor(0, 0, 255, 255)
+	else
+		love.graphics.setColor(255, 255, 255, 255)
+	end
 	love.graphics.print("YOU LOST", 50, 50)
 end
 

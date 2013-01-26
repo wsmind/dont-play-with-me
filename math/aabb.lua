@@ -47,7 +47,7 @@ local mt = {
 		end,
 		
 		-- debug draw (note: must be called from draw(), won't draw if called from update())
-		draw = function(self, r, g, b, a)
+		drawDebug = function(self, r, g, b, a)
 			love.graphics.setColor(r, g, b, a)
 			love.graphics.rectangle("line", self.min.x, self.min.y, self.max.x - self.min.x, self.max.y - self.min.y)
 		end
