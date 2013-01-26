@@ -17,6 +17,7 @@ function Block.new(options)
 	self.height = options.height
 	self.excitement = options.excitement
 	self.activated = false
+	self.animPhase = math.random() * 2 * math.pi
 	
 	-- get the color from the excitement
 	if self.excitement > 0 then
@@ -37,7 +38,9 @@ function Block:update(dt)
 	--self.x = self.x - dt * Config.scrollSpeed
 	--self.height = self.height + math.sin(self.x * 0.02) * 5
 	
-	self.aabb = aabb(vec2(self.x, Config.blockBase - self.height), vec2(self.x + self.width, Config.blockBase))
+	self.animHeight = self.height + math.sin(love.timer.getTime() * Config.blockAnimSpeed + self.animPhase) * Config.blockAnimSize
+	
+	self.aabb = aabb(vec2(self.x, Config.blockBase - self.animHeight), vec2(self.x + self.width, Config.blockBase))
 end
 
 function Block:collide(aabb)
@@ -59,7 +62,7 @@ end
 function Block:draw()
 	love.graphics.setColor(self.color.x, self.color.y, self.color.z, self.color.w)
 	
-	love.graphics.rectangle("fill", self.x, Config.blockBase - self.height, self.width, self.height)
+	love.graphics.rectangle("fill", self.x, Config.blockBase - self.animHeight, self.width, self.animHeight)
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
 end
