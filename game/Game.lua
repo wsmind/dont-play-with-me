@@ -5,6 +5,8 @@ require("math.vec2")
 require("game.Block")
 require("game.Config")
 require("game.Hero")
+require("game.Mood")
+require("game.Background")
 
 Game = {}
 Game.__index = Game
@@ -20,11 +22,15 @@ function Game.new(options)
     
 	love.graphics.setFont(love.graphics.newFont(40))
 	
+	-- camera
     self.camera = vec2(0, 0)
 	self.zoom = 1.0
 	
+	-- mood
+	self.mood = Mood.new{}
+	
 	-- hero stuff
-	self.hero = Hero:new{}
+	self.hero = Hero.new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
 	self.heroInPostJumping = false
@@ -32,6 +38,7 @@ function Game.new(options)
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
     --love.audio.play(music)
 	
+	-- blocks
 	self.blocks = {}
 	local currentX = 0
 	for i = 0, 500 do
@@ -45,6 +52,11 @@ function Game.new(options)
 		currentX = currentX + options.width
 		table.insert(self.blocks, block)
 	end
+	
+	-- background
+	self.background = Background.new{
+		mood = self.mood
+	}
 	
     return self
 end
@@ -79,6 +91,9 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
+	-- background
+	self.background:update(dt)
+	
 	-- updates hero
 	local heroTotalMove = vec2(0,0)
 	if self.heroMovesLeft then
@@ -110,6 +125,13 @@ function Game:update(dt)
 end
 
 function Game:draw()
+    -- draw background
+	--local screenExtent = vec2(self.virtualScreenHeight * self.screenRatio, self.virtualScreenHeight)
+	--local cameraBounds = aabb(self.camera - screenExtent, self.camera + screenExtent)
+    --self.map:draw(cameraBounds)
+	self.background:draw()
+	
+	
 	love.graphics.push()
 	
     -- apply virtual resolution before rendering anything
@@ -120,12 +142,7 @@ function Game:draw()
 	
     -- move to camera position
     love.graphics.translate((self.virtualScreenHeight * 0.5 / self.zoom) * self.screenRatio - self.camera.x, (self.virtualScreenHeight * 0.5 / self.zoom) - self.camera.y)
-	
-    -- draw background
-	--local screenExtent = vec2(self.virtualScreenHeight * self.screenRatio, self.virtualScreenHeight)
-	--local cameraBounds = aabb(self.camera - screenExtent, self.camera + screenExtent)
-    --self.map:draw(cameraBounds)
-	
+
 	-- draw hero
 	if self.collision then
 		love.graphics.setColor(255, 0, 0, 255)
