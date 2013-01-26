@@ -17,6 +17,7 @@ function Block.new(options)
 	self.height = options.height
 	self.excitement = options.excitement
 	self.activated = false
+	self.activationTime = 0
 	self.animPhase = math.random() * 2 * math.pi
 	
 	-- get the color from the excitement
@@ -37,6 +38,11 @@ end
 function Block:update(dt)
 	--self.x = self.x - dt * Config.scrollSpeed
 	--self.height = self.height + math.sin(self.x * 0.02) * 5
+	
+	if self.activated then
+		self.activationTime = self.activationTime + dt
+		self.color = vec4(20, 20, 20, 255) + vec4(235, 235, 235, 0) * math.exp(-self.activationTime * 2)
+	end
 	
 	self.animHeight = self.height + math.sin(love.timer.getTime() * Config.blockAnimSpeed + self.animPhase) * Config.blockAnimSize
 	
