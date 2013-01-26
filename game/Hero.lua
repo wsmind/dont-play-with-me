@@ -22,7 +22,15 @@ function Hero.new(options)
 	self.image:setFilter("nearest", "nearest")
 	
 	local grid = anim8.newGrid(64, 64, self.image:getWidth(), self.image:getHeight())
-	self.anim = anim8.newAnimation("loop", grid(1,1, 1,2, 1,3, 2,3, 3,3), 0.2)
+	self.animations = {
+		idle = anim8.newAnimation("loop", grid(1, 2), 0.2),
+		walk = anim8.newAnimation("loop", grid(1, 1, 2, 1), 0.2),
+		jump = anim8.newAnimation("once", grid(1, 3, 2, 3, 3, 3), 0.2),
+		fall = anim8.newAnimation("loop", grid(4, 3), 0.2),
+		float = anim8.newAnimation("loop", grid(1, 4, 2, 4), 0.2)
+	}
+	self:playAnimation("idle")
+	self.animationSide = 1
 	
     return self
 end
@@ -34,6 +42,15 @@ end
 
 function Hero:move(movement)
 	self.velocity.x = movement.x
+	
+	-- check if we need to flip the animations
+	if self.animationSide * movement.x < 0 then
+		self.animationSide = movement.x
+		
+		for _, anim in pairs(self.animations) do
+			anim:flipH()
+		end
+	end
 end
 
 function Hero:handleCollision(collisionInfo)
@@ -57,7 +74,31 @@ function Hero:handleCollision(collisionInfo)
 	return false
 end
 
+function Hero:playAnimation(name)
+	local anim = self.animations[name]
+	if not (self.currentAnimation == anim) then
+		self.currentAnimation = self.animations[name]
+		self.currentAnimation:gotoFrame(1)
+		self.currentAnimation:resume()
+	end
+end
+
 function Hero:update(dt)
+	-- animation state
+	if self.grounded then
+		if math.abs(self.velocity.x) > 0 then
+			self:playAnimation("walk")
+		else
+			self:playAnimation("idle")
+		end
+	else
+		if self.velocity.y < 0 then
+			self:playAnimation("jump")
+		else
+			self:playAnimation("fall")
+		end
+	end
+	
 	-- reset grounded state
 	self.grounded = false
 	
@@ -74,7 +115,7 @@ function Hero:update(dt)
 		self.grounded = true
 	end
 	
-	self.anim:update(dt)
+	self.currentAnimation:update(dt)
 end
 
 function Hero:jump()
@@ -86,10 +127,12 @@ function Hero:jump()
 end
 
 function Hero:draw()
-	--love.graphics.rectangle("fill", self.pos.x - 16, self.pos.y - 16, 32, 32)
 	love.graphics.setColor(255, 255, 255, 255)
-	--love.graphics.draw(self.image, self.pos.x - 16 * Config.rabbitScale, self.pos.y - 16 * Config.rabbitScale, 0, Config.rabbitScale, Config.rabbitScale)
-	self.anim:draw(self.image, self.pos.x, self.pos.y, 0, Config.rabbitScale, Config.rabbitScale, 48, 48)
+	local headPosition = vec2(48, 48)
+	if self.animationSide < 0 then
+		headPosition = vec2(16, 48)
+	end
+	self.currentAnimation:draw(self.image, self.pos.x, self.pos.y, 0, Config.rabbitScale, Config.rabbitScale, headPosition.x, headPosition.y)
 	
 	--local bounds = self:getBounds()
 	--bounds:drawDebug(255, 0, 0, 255)
