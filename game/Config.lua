@@ -13,10 +13,14 @@ Config = {
 	heroVerticalSpeed = 1000, -- How much the hero moves when it's jumping upwards (px/s)
 	heroJumpDuration = 1, -- How long does the ascending part of the jump last, in seconds
 	gravity = vec2(0, 2000), -- Strenght of the gravity
+	rabbitScale = 2,
 	
 	-- Blocks
-	blockWidth = 120,
-	blockWidthVariation = 50,
+	blockWidth = 200,
+	blockWidthVariation = 150,
 	blockHeight = 300,
-	blockHeightVariation = 100
+	blockHeightVariation = 100,
+	
+	-- Scrolling
+	scrollSpeed = 80
 }

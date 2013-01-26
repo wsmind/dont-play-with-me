@@ -39,7 +39,7 @@ function Game.new(options)
 			x = currentX,
 			width = Config.blockWidth + Config.blockWidthVariation * (math.random() - 0.5),
 			height = Config.blockHeight + Config.blockHeightVariation * (math.random() - 0.5),
-			excitement = math.random(2) * 2 - 2
+			excitement = math.floor(math.random() * 2) * 2 - 1
 		}
 		local block = Block.new(options)
 		currentX = currentX + options.width

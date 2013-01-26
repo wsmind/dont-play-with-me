@@ -3,6 +3,7 @@
 
 require("math.aabb")
 require("math.vec2")
+require("game.Config")
 
 Block = {}
 Block.__index = Block
@@ -21,8 +22,8 @@ function Block.new(options)
 end
 
 function Block:update(dt)
-	self.x = self.x - dt * 40
-	self.height = self.height + math.sin(self.x * 0.1) * 5
+	self.x = self.x - dt * Config.scrollSpeed
+	self.height = self.height + math.sin(self.x * 0.02) * 5
 	
 	self.aabb = aabb(vec2(self.x, 540 - self.height), vec2(self.x + self.width, 540))
 end
@@ -46,7 +47,7 @@ function Block:draw()
 		if self.excitement > 0 then
 			love.graphics.setColor(255, 0, 0, 255)
 		else
-			love.graphics.setColor(0, 0, 255, 255)
+			love.graphics.setColor(21, 19, 101, 255)
 		end
 	else
 		-- deactivated -> black
