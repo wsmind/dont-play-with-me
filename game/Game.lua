@@ -16,7 +16,7 @@ function Game.new(options)
     setmetatable(self, Game)
 	
     -- the game has a virtual height
-	self.virtualScreenHeight = 1080
+	self.virtualScreenHeight = Config.virtualScreenHeight
     self.virtualScaleFactor = love.graphics.getHeight() / self.virtualScreenHeight
     self.screenRatio = love.graphics.getWidth() / love.graphics.getHeight()
     
@@ -29,8 +29,6 @@ function Game.new(options)
 	self.hero = Hero:new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
-	self.heroJumps = false
-	self.heroJumping = false
 	self.heroInPostJumping = false
 	
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
@@ -61,8 +59,9 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesLeft = true
 	elseif key == "right" then
 		self.heroMovesRight = true
-	elseif key == "up" and not self.heroJumps and not self.heroInPostJumping then
-		self.heroJumps = true
+	elseif key == "up" and not self.heroInPostJumping then
+		self.heroInPostJumping = true
+		self.hero:jump(Config.heroVerticalSpeed)
 	end
 end
 
@@ -86,14 +85,8 @@ function Game:update(dt)
 	if self.heroMovesRight then
 		heroTotalMove = heroTotalMove + Config.heroHorizontalSpeed
 	end
-	if self.heroJumps then
-		self.heroJumps = false
-		heroTotalMove = heroTotalMove + Config.heroVerticalSpeed
-		
-		-- enable hero jump again
-		self.heroInPostJumping = true
-		
-	end
+	
+	-- performs move
 	self.hero:move(heroTotalMove)
 	self.hero:update(dt)
 	
