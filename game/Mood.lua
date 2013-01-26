@@ -19,7 +19,7 @@ end
 -- Negative quantities influence the mood towards boredom, and positive quantities
 -- towards excitement.
 function Mood:influence(quantity)
-	influence = math.min(1, math.max(0, influence + quantity * self.blockInflunceOnExcitement));
+	self.excitement = math.min(1, math.max(0, self.excitement + quantity * self.blockInflunceOnExcitement))
 end
 
 -- Returns the color which fits the best the current mood.
