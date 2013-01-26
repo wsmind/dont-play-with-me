@@ -3,6 +3,7 @@
 
 require("math.aabb")
 require("math.vec2")
+require("game.Config")
 
 Block = {}
 Block.__index = Block
@@ -17,14 +18,26 @@ function Block.new(options)
 	self.excitement = options.excitement
 	self.activated = false
 	
+	-- get the color from the excitement
+	if self.excitement > 0 then
+		self.color = Config.excitedColor
+	else
+		self.color = Config.boredColor
+	end
+	
+	-- then randomize it a bit
+	local colorVariation = vec4(255, 255, 255, 0) * (math.random() * 2 - 1) * Config.blockColorVariation
+	self.color = self.color + colorVariation
+	self.color = self.color:clamp(0, 255)
+	
     return self
 end
 
 function Block:update(dt)
-	self.x = self.x - dt * 40
-	self.height = self.height + math.sin(self.x * 0.1) * 5
+	--self.x = self.x - dt * Config.scrollSpeed
+	--self.height = self.height + math.sin(self.x * 0.02) * 5
 	
-	self.aabb = aabb(vec2(self.x, 540 - self.height), vec2(self.x + self.width, 540))
+	self.aabb = aabb(vec2(self.x, Config.blockBase - self.height), vec2(self.x + self.width, Config.blockBase))
 end
 
 function Block:collide(aabb)
@@ -36,24 +49,17 @@ function Block:activate()
 		return 0
 	end
 	
+	-- deactivate the block
 	self.activated = true
+	self.color = vec4(20, 20, 20, 255)
+	
 	return self.excitement
 end
 
 function Block:draw()
-	if not self.activated then
-		-- usable block; blue if boring, red if exciting
-		if self.excitement > 0 then
-			love.graphics.setColor(255, 0, 0, 255)
-		else
-			love.graphics.setColor(0, 0, 255, 255)
-		end
-	else
-		-- deactivated -> black
-		love.graphics.setColor(20, 20, 20, 255)
-	end
+	love.graphics.setColor(self.color.x, self.color.y, self.color.z, self.color.w)
 	
-	love.graphics.rectangle("fill", self.x, 540 - self.height, self.width, self.height)
+	love.graphics.rectangle("fill", self.x, Config.blockBase - self.height, self.width, self.height)
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
 end
