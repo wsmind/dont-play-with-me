@@ -1,6 +1,4 @@
---[[ 
-The NoName Fiber Game
-Copyright (c) 2012 Aurélien Defossez, Jean-Marie Comets, Anis Benyoub, Rémi Papillié
+--[[
 ]]
 
 require("math.vec2")

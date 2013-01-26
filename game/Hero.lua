@@ -18,7 +18,6 @@ function Hero.new(options)
 	self.grounded = false
 	
 	self.jumpYVelocityLeftToApply = 0 -- Velocity remaining to be applied to the jump
-	self.jumpTimeLeft = 0 -- Time left for the jump
 	
     return self
 end
