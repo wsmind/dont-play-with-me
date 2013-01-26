@@ -5,6 +5,8 @@
 require("math.aabb")
 require("math.vec2")
 
+local anim8 = require("lib.anim8")
+
 Hero = {}
 Hero.__index = Hero
 
@@ -16,8 +18,11 @@ function Hero.new(options)
 	self.velocity = vec2(0,0)
 	self.groundPlaneY = Config.virtualScreenHeight / 2
 	self.grounded = false
-	self.image = love.graphics.newImage("assets/bunny/idle.png")
+	self.image = love.graphics.newImage("assets/bunny/Spritesheet.png")
 	self.image:setFilter("nearest", "nearest")
+	
+	local grid = anim8.newGrid(64, 64, self.image:getWidth(), self.image:getHeight())
+	self.anim = anim8.newAnimation("loop", grid(1,1, 1,2, 1,3, 2,3, 3,3), 0.2)
 	
     return self
 end
@@ -68,6 +73,8 @@ function Hero:update(dt)
 		self.pos.y = self.groundPlaneY - 16
 		self.grounded = true
 	end
+	
+	self.anim:update(dt)
 end
 
 function Hero:jump()
@@ -81,7 +88,8 @@ end
 function Hero:draw()
 	--love.graphics.rectangle("fill", self.pos.x - 16, self.pos.y - 16, 32, 32)
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.draw(self.image, self.pos.x - 16 * Config.rabbitScale, self.pos.y - 16 * Config.rabbitScale, 0, Config.rabbitScale, Config.rabbitScale)
+	--love.graphics.draw(self.image, self.pos.x - 16 * Config.rabbitScale, self.pos.y - 16 * Config.rabbitScale, 0, Config.rabbitScale, Config.rabbitScale)
+	self.anim:draw(self.image, self.pos.x, self.pos.y, 0, Config.rabbitScale, Config.rabbitScale, 48, 48)
 	
 	--local bounds = self:getBounds()
 	--bounds:drawDebug(255, 0, 0, 255)
