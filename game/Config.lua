@@ -27,6 +27,8 @@ Config = {
 	blockHeightVariation = 200,
 	blockColorVariation = 15,
 	blockBase = 600,
+	blockAnimSpeed = 3,
+	blockAnimSize = 10,
 	
 	
 	-- Base colors
