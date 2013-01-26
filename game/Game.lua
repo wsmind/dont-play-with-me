@@ -8,6 +8,7 @@ require("game.Config")
 require("game.Hero")
 require("game.Mood")
 require("game.Background")
+require("game.Soundtrack")
 
 Game = {}
 Game.__index = Game
@@ -58,6 +59,10 @@ function Game.new(options)
 		mood = self.mood
 	}
 	
+	-- music
+	self.soundtrack = Soundtrack.new{}
+	self.soundtrack:playOnly("alpha")
+	
     return self
 end
 
@@ -73,6 +78,13 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesLeft = true
 	elseif key == "right" then
 		self.heroMovesRight = true
+	end
+	
+	-- audio choice
+	if key == "1" then
+		self.soundtrack:playOnly("alpha")
+	elseif key == "2" then
+		self.soundtrack:playOnly("tonight")
 	end
 end
 
