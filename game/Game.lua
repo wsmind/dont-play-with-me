@@ -2,6 +2,7 @@
 ]]
 
 require("math.vec2")
+require("math.num")
 require("game.Block")
 require("game.Config")
 require("game.Hero")
@@ -85,6 +86,9 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
+	-- mood
+	self.mood:update(dt)
+	
 	-- background
 	self.background:update(dt)
 	
@@ -122,8 +126,9 @@ function Game:update(dt)
 		self.hero:jump()
 	end
 	
-	-- scroll screen
-	self.camera.x = self.camera.x + Config.scrollSpeed * dt
+	-- scroll screen, function of the mood
+	--self.camera.x = self.camera.x + Config.cameraScrollSpeed  * dt
+	self.camera.x = self.camera.x + math.linearInterpolate(Config.cameraScrollSpeedMin, Config.cameraScrollSpeedMax, self.mood.excitement) * dt
 	
 	-- shake camera
 	self.camera.y = math.sin(love.timer.getTime() * Config.cameraShakeSpeed) * Config.cameraShakeAmplitude

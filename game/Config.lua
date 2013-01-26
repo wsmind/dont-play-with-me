@@ -28,8 +28,6 @@ Config = {
 	blockColorVariation = 15,
 	blockBase = 600,
 	
-	-- Scrolling
-	scrollSpeed = 300,
 	
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
@@ -38,5 +36,7 @@ Config = {
 	
 	-- Camera
 	cameraShakeAmplitude = 20,
-	cameraShakeSpeed = 3
+	cameraShakeSpeed = 3,
+	cameraScrollSpeedMin = 300,
+	cameraScrollSpeedMax = 500
 }
