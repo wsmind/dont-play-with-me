@@ -33,12 +33,16 @@ function Game.new(options)
     --love.audio.play(music)
 	
 	self.blocks = {}
-	for i = 20, 200 do
-		local block = Block.new{
-			x = i * 40,
-			width = 40,
-			height = math.random(200)
+	local currentX = 0
+	for i = 0, 500 do
+		local options = {
+			x = currentX,
+			width = Config.blockWidth + Config.blockWidthVariation * (math.random() - 0.5),
+			height = Config.blockHeight + Config.blockHeightVariation * (math.random() - 0.5),
+			excitement = math.random(2) * 2 - 2
 		}
+		local block = Block.new(options)
+		currentX = currentX + options.width
 		table.insert(self.blocks, block)
 	end
 	
@@ -97,8 +101,10 @@ function Game:update(dt)
 		local collisionInfo = block:collide(self.hero:getBounds())
 		if collisionInfo then
 			self.collision = true
-			--self.hero.pos = self.hero.pos + collisionInfo.normal * collisionInfo.depth
-			self.hero:handleCollision(collisionInfo)
+			if self.hero:handleCollision(collisionInfo) then
+				local excitement = block:activate()
+				-- Mood.influence(excitement)
+			end
 		end
 	end
 end

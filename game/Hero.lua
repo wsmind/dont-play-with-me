@@ -44,7 +44,10 @@ function Hero:handleCollision(collisionInfo)
 	-- check if we collided with the ground
 	if -collisionInfo.normal.y > math.abs(collisionInfo.normal.x) then
 		self.grounded = true
+		return true -- signal ground collision to game, for block interaction
 	end
+	
+	return false
 end
 
 function Hero:update(dt)
@@ -77,8 +80,8 @@ function Hero:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.rectangle("fill", self.pos.x - 16, self.pos.y - 16, 32, 32)
 	
-	local bounds = self:getBounds()
-	bounds:drawDebug(255, 0, 0, 255)
+	--local bounds = self:getBounds()
+	--bounds:drawDebug(255, 0, 0, 255)
 	
 	love.graphics.setColor(255, 0, 0, 255)
 	love.graphics.print(self.pos.y, -150, -150)

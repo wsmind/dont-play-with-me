@@ -12,5 +12,11 @@ Config = {
 	heroHorizontalSpeed = vec2(500,0), -- How much the hero moves when it's walking to the right (px/s)
 	heroVerticalSpeed = 1000, -- How much the hero moves when it's jumping upwards (px/s)
 	heroJumpDuration = 1, -- How long does the ascending part of the jump last, in seconds
-	gravity = vec2(0, 2000) -- Strenght of the gravity
+	gravity = vec2(0, 2000), -- Strenght of the gravity
+	
+	-- Blocks
+	blockWidth = 120,
+	blockWidthVariation = 50,
+	blockHeight = 300,
+	blockHeightVariation = 100
 }
