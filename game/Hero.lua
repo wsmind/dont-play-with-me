@@ -21,7 +21,8 @@ function Hero:move(movement)
 end
 
 function Hero:update(dt)
-
+	-- gravity!
+	self.pos = self.pos + (Config.gravity * dt)
 end
 
 function Hero:draw()

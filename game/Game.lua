@@ -29,6 +29,9 @@ function Game.new(options)
 	self.hero = Hero:new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
+	self.heroJumps = false
+	self.heroJumping = false
+	self.heroInPostJumping = false
 	
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
     --love.audio.play(music)
@@ -58,6 +61,8 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesLeft = true
 	elseif key == "right" then
 		self.heroMovesRight = true
+	elseif key == "up" and not self.heroJumps and not self.heroInPostJumping then
+		self.heroJumps = true
 	end
 end
 
@@ -67,6 +72,8 @@ function Game:keyReleased(key, unicode)
 		self.heroMovesLeft = false
 	elseif key == "right" then
 		self.heroMovesRight = false
+	elseif key == "up" then
+		self.heroInPostJumping = false
 	end
 end
 
@@ -78,6 +85,14 @@ function Game:update(dt)
 	end	
 	if self.heroMovesRight then
 		heroTotalMove = heroTotalMove + Config.heroHorizontalSpeed
+	end
+	if self.heroJumps then
+		self.heroJumps = false
+		heroTotalMove = heroTotalMove + Config.heroVerticalSpeed
+		
+		-- enable hero jump again
+		self.heroInPostJumping = true
+		
 	end
 	self.hero:move(heroTotalMove)
 	self.hero:update(dt)
