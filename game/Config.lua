@@ -25,7 +25,7 @@ Config = {
 	blockWidthVariation = 100,
 	blockHeight = 350,
 	blockHeightVariation = 200,
-	blockColorVariation = 0.2,
+	blockColorVariation = 15,
 	blockBase = 600,
 	
 	-- Scrolling

@@ -26,7 +26,7 @@ function Block.new(options)
 	end
 	
 	-- then randomize it a bit
-	local colorVariation = vec4(255, 255, 255, 0) * (math.random() * 2 - 1) * Config.blockColorVariation
+	local colorVariation = vec4(math.random() * 2 - 1, math.random() * 2 - 1, math.random() * 2 - 1, 0) * Config.blockColorVariation
 	self.color = self.color + colorVariation
 	self.color = self.color:clamp(0, 255)
 	

@@ -48,7 +48,7 @@ function Game.new(options)
 			excitement = math.floor(math.random() * 2) * 2 - 1
 		}
 		local block = Block.new(options)
-		currentX = currentX + options.width
+		currentX = currentX + options.width + 10
 		table.insert(self.blocks, block)
 	end
 	
