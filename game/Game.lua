@@ -61,7 +61,7 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesRight = true
 	elseif key == "up" and not self.heroInPostJumping then
 		self.heroInPostJumping = true
-		self.hero:jump(Config.heroVerticalSpeed)
+		self.hero:jump(Config.heroVerticalImpulse)
 	end
 end
 

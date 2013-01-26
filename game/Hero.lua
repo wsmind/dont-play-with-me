@@ -16,7 +16,6 @@ function Hero.new(options)
 	self.groundPlaneY = Config.virtualScreenHeight / 3
 	
 	self.jumpYVelocityLeftToApply = 0 -- Velocity remaining to be applied to the jump
-	self.jumpTimeLeft = 0 -- Time left for the jump
 	
     return self
 end
@@ -32,7 +31,6 @@ function Hero:jump(movement)
 
 	-- registers the new jump velocity
 	self.jumpYVelocityLeftToApply = movement.y
-	self.jumpTimeLeft = Config.heroJumpDuration
 end
 
 function Hero:update(dt)
@@ -48,10 +46,9 @@ function Hero:update(dt)
 	end
 	
 	-- jump!
-	if self.jumpTimeLeft > 0 then
+	if self.jumpYVelocityLeftToApply ~= 0 then
 		self.velocity.y = self.velocity.y + self.jumpYVelocityLeftToApply
-		--self.jumpTimeLeft = self.jumpTimeLeft - dt
-		self.jumpTimeLeft = 0
+		self.jumpYVelocityLeftToApply = 0
 	end
 	
 	-- position update
@@ -67,4 +64,6 @@ end
 
 function Hero:isOnGround()
 	return self.pos.y >= self.groundPlaneY
+	
+	--todo: on est en collision sur une surface horizontale
 end
