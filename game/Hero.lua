@@ -17,8 +17,6 @@ function Hero.new(options)
 	self.groundPlaneY = Config.virtualScreenHeight / 2
 	self.grounded = false
 	
-	self.jumpYVelocityLeftToApply = 0 -- Velocity remaining to be applied to the jump
-	
     return self
 end
 
