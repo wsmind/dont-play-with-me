@@ -122,6 +122,9 @@ function Game:update(dt)
 			end
 		end
 	end
+	
+	-- scroll screen
+	self.camera.x = self.camera.x + Config.scrollSpeed * dt
 end
 
 function Game:draw()

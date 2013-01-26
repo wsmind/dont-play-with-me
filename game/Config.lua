@@ -3,6 +3,7 @@
 ]]
 
 require("math.vec2")
+require("math.vec4")
 
 Config = {
 	-- Game space configuration 
@@ -19,8 +20,13 @@ Config = {
 	blockWidth = 200,
 	blockWidthVariation = 150,
 	blockHeight = 300,
-	blockHeightVariation = 100,
+	blockHeightVariation = 300,
+	blockColorVariation = 0.2,
 	
 	-- Scrolling
-	scrollSpeed = 80
+	scrollSpeed = 300,
+	
+	-- Base colors
+	boredColor = vec4(21, 19, 101, 255),
+	excitedColor = vec4(220, 16, 20, 255)
 }
