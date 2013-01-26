@@ -37,7 +37,7 @@ function Block:update(dt)
 	--self.x = self.x - dt * Config.scrollSpeed
 	--self.height = self.height + math.sin(self.x * 0.02) * 5
 	
-	self.aabb = aabb(vec2(self.x, 540 - self.height), vec2(self.x + self.width, 540))
+	self.aabb = aabb(vec2(self.x, Config.blockBase - self.height), vec2(self.x + self.width, Config.blockBase))
 end
 
 function Block:collide(aabb)
@@ -59,7 +59,7 @@ end
 function Block:draw()
 	love.graphics.setColor(self.color.x, self.color.y, self.color.z, self.color.w)
 	
-	love.graphics.rectangle("fill", self.x, 540 - self.height, self.width, self.height)
+	love.graphics.rectangle("fill", self.x, Config.blockBase - self.height, self.width, self.height)
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
 end

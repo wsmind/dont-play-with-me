@@ -33,7 +33,6 @@ function Game.new(options)
 	self.hero = Hero.new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
-	self.heroInPostJumping = false
 	
     --music = love.audio.newSource(gameConfig.sound.generaltheme)
     --love.audio.play(music)
@@ -73,9 +72,6 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesLeft = true
 	elseif key == "right" then
 		self.heroMovesRight = true
-	elseif key == "up" and not self.heroInPostJumping then
-		self.heroInPostJumping = true
-		self.hero:jump()
 	end
 end
 
@@ -85,8 +81,6 @@ function Game:keyReleased(key, unicode)
 		self.heroMovesLeft = false
 	elseif key == "right" then
 		self.heroMovesRight = false
-	elseif key == "up" then
-		self.heroInPostJumping = false
 	end
 end
 
@@ -123,17 +117,21 @@ function Game:update(dt)
 		end
 	end
 	
+	-- jumping
+	if love.keyboard.isDown("up") then
+		self.hero:jump()
+	end
+	
 	-- scroll screen
 	self.camera.x = self.camera.x + Config.scrollSpeed * dt
+	
+	-- shake camera
+	self.camera.y = math.sin(love.timer.getTime() * Config.cameraShakeSpeed) * Config.cameraShakeAmplitude
 end
 
 function Game:draw()
     -- draw background
-	--local screenExtent = vec2(self.virtualScreenHeight * self.screenRatio, self.virtualScreenHeight)
-	--local cameraBounds = aabb(self.camera - screenExtent, self.camera + screenExtent)
-    --self.map:draw(cameraBounds)
 	self.background:draw()
-	
 	
 	love.graphics.push()
 	
@@ -145,7 +143,7 @@ function Game:draw()
 	
     -- move to camera position
     love.graphics.translate((self.virtualScreenHeight * 0.5 / self.zoom) * self.screenRatio - self.camera.x, (self.virtualScreenHeight * 0.5 / self.zoom) - self.camera.y)
-
+	
 	-- draw hero
 	if self.collision then
 		love.graphics.setColor(255, 0, 0, 255)

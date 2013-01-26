@@ -17,16 +17,21 @@ Config = {
 	rabbitScale = 2,
 	
 	-- Blocks
-	blockWidth = 200,
-	blockWidthVariation = 150,
-	blockHeight = 300,
-	blockHeightVariation = 300,
+	blockWidth = 120,
+	blockWidthVariation = 100,
+	blockHeight = 350,
+	blockHeightVariation = 200,
 	blockColorVariation = 0.2,
+	blockBase = 600,
 	
 	-- Scrolling
 	scrollSpeed = 300,
 	
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
-	excitedColor = vec4(220, 16, 20, 255)
+	excitedColor = vec4(220, 16, 20, 255),
+	
+	-- Camera
+	cameraShakeAmplitude = 20,
+	cameraShakeSpeed = 3
 }
