@@ -11,6 +11,7 @@ require("game.Mood")
 require("game.Background")
 require("game.Soundtrack")
 require("game.TextBlock")
+require("game.GameOverScene")
 
 Game = {}
 Game.__index = Game
@@ -129,6 +130,10 @@ function Game.new(options)
 		}
 	}
 	
+	-- game over
+	self.isGameOver = false
+	self.gameOverScene = nil
+	
 	self.score = 0
 	
     return self
@@ -175,6 +180,11 @@ end
 
 function Game:update(dt)
 
+	if self.isGameOver then
+		self.gameOverScene:update(dt)
+		return
+	end
+	
 	-- mood
 	self.mood:update(dt)
 	
@@ -262,7 +272,8 @@ function Game:update(dt)
 	local rightScreenBound = self:_screenToWorld(vec2(love.graphics.getWidth(), 0)).x
 	
 	if self.hero.pos.x < leftScreenBound then
-		--self:gameOver()
+		self:gameOver()
+		return
 	elseif self.hero.pos.x > rightScreenBound then
 		self.hero.pos.x = rightScreenBound
 	end
@@ -283,6 +294,11 @@ function Game:update(dt)
 end
 
 function Game:draw()
+
+	if self.isGameOver then
+		self.gameOverScene:draw()
+		return
+	end
 
     -- draw background
 	self.background:draw()
@@ -379,4 +395,13 @@ function Game:_screenToWorld(vector)
     local screenSpaceCamera = vec2(love.graphics.getWidth() * 0.5, love.graphics.getHeight() * 0.5)
     local relativePosition = (vector - screenSpaceCamera) / vec2(self.virtualScaleFactor * self.zoom, self.virtualScaleFactor * self.zoom)
     return relativePosition + self.camera
+end
+
+function Game:gameOver()
+	self.gameOverScene = GameOverScene.new{
+		mood = self.mood,
+		score = self.score
+	}
+	
+	self.isGameOver = 1
 end
