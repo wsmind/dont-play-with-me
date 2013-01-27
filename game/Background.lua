@@ -53,7 +53,6 @@ function Background:draw()
 	-- set color mode
 	love.graphics.setColorMode("modulate")
 	
-	--love.graphics.rectangle("fill", 0, 0, Config.virtualScreenHeight * self.screenRatio, Config.virtualScreenHeight)
+	-- draw
 	love.graphics.draw(self.image, 0, 0, 0, self.imageScaleX, self.imageScaleY)
-	--love.graphics.draw( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
 end
