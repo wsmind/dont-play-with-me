@@ -56,7 +56,7 @@ function Game:start()
 	
 	-- blocks
 	self.blocks = {}
-	local currentX = -1000
+	local currentX = -2000
 	for i = 0, 1000 do
 		local options = {
 			x = currentX,
@@ -218,7 +218,7 @@ function Game:update(dt)
 	-- blocks
 	for _, block in ipairs(self.blocks) do
 		-- basic culling
-		if (self.camera.x - 1000 < block.x) and (self.camera.x + 1000 > block.x) then
+		if (self.camera.x - 2000 < block.x) and (self.camera.x + 2000 > block.x) then
 			block:update(dt)
 			
 			local collisionInfo = block:collide(self.hero:getBounds())
@@ -344,7 +344,7 @@ function Game:draw()
 	-- draw blocks
 	for _, block in ipairs(self.blocks) do
 		-- basic culling
-		if (self.camera.x - 1000 < block.x) and (self.camera.x + 1000 > block.x) then
+		if (self.camera.x - 2000 < block.x) and (self.camera.x + 2000 > block.x) then
 			block:draw()
 		end
 	end
