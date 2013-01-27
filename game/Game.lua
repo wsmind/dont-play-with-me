@@ -190,8 +190,11 @@ function Game:draw()
 		love.graphics.setColor(255, 255, 255, 255)
 	end
 	love.graphics.print("YOU LOST", 50, 50)
-	love.graphics.print(self.mood.sampleAverage, 100, 100)
-	love.graphics.print(self.mood.sampleSD, 100, 150)
+	love.graphics.print(self.mood.hSampleAverage, 100, 100)
+	love.graphics.print(self.mood.hSampleSD, 100, 150)
+	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
+	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
+	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
 end
 
 function Game:_screenToWorld(vector)
