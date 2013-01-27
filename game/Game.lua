@@ -77,6 +77,43 @@ function Game.new(options)
 		table.insert(self.hearts, heart)
 	end]]--
 	
+	-- text assets
+	self.feedbackTexts = {
+		{
+			slopeMin = 0,
+			slopeMax = 2,
+			texts = {
+				"Oh yes, that's it!",
+				"Apart from being pretty good in here, what do you do?",
+				"Wanna go watch a movie later?",
+				"Exactly like this!",
+				"Yep, you're doing pretty well.",
+				"That's quite fun!",
+				"Amusing.",
+				"I do like it.",
+				"I actually enjoy this.",
+				"Is it hot in here or is it just you?"
+			}
+		},
+		{
+			slopeMin = -2,
+			slopeMax = 0,
+			texts = {
+				"Um... okay... I'm not quite sure about that...",
+				"Could you just... stop acting like that?!",
+				"Woah, don't behave like an idiot.",
+				"Come on, really?",
+				"You're kidding me, aren't you?",
+				"Haha, funny. Now do it right.",
+				"Wait... seriously...?",
+				"Ok, um, yeah... well...No... no, i don't like it.",
+				"I do not like it. I do not like it at all.",
+				"No, really, I'm having more fun with myself.",
+				"Wake me up when something exciting happens."
+			}
+		}
+	}
+	
 	self.score = 0
 	
     return self
@@ -264,6 +301,7 @@ function Game:draw()
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
+	-- computes the text color
 	local ccolor = nil
 	if slope > 0 then
 		ccolor = Config.excitedColor
@@ -271,11 +309,23 @@ function Game:spawnTextBlock(slope, targetBlock)
 		ccolor = Config.boredColor
 	end
 	
+	-- gets the text value depending on the slope
+	local textv = ""
+	for k,v in pairs(self.feedbackTexts) do
+		if slope > v.slopeMin and slope < v.slopeMax then
+			textv = v.texts[math.random(1, #v.texts)]
+			print(textv)
+		end
+	end
+	
+	-- other pos parameters
 	local blockTopHeight = targetBlock:getTopHeight() - 50
+	
+	-- adds the text on-screen
 	table.insert(self.textBlocks, TextBlock.new{
 				spawnPos = vec2(targetBlock.x, blockTopHeight),
 				anchorPos = self:_screenToWorld(vec2(3 * self.virtualScreenWidth / 4, self.virtualScreenHeight / 3)),
-				text = "oh t'es mimi",
+				text = textv,
 				color = ccolor
 		}
 	)

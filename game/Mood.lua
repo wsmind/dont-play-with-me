@@ -34,7 +34,7 @@ function Mood.new(options)
 	self.iExcitementInfluenceRatio = 0 -- proportion of excitement
 	
 	-- sample collection for the pattern
-	self.pSampleCount = 4
+	self.pSampleCount = 16
 	self.pSamples = {}
 	self.pSampleAnalysisHistory = {}
 	self.pLastSampleAnalysis = 0
