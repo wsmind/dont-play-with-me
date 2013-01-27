@@ -64,7 +64,7 @@ function IntroScene:draw()
 	end
 	
 	love.graphics.setColor(Config.cLight:asTable())
-	love.graphics.print("Press any key.", self.virtualScreenWidth / 2, self.virtualScreenHeight / 3)
+	love.graphics.print("Press any key.", self.virtualScreenWidth / 2 - 100, self.virtualScreenHeight / 3)
 	
 	love.graphics.draw(self.currentPageSource, self.virtualScreenWidth / 4, self.virtualScreenHeight / 4, 0, 1, 1, self.currentPageWidth / 2, self.currentPageHeight / 2)
 
