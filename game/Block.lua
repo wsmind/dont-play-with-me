@@ -102,7 +102,7 @@ function Block:draw()
 	
 	local middleCount = math.floor((rightStart - leftEnd) / (32 * Config.spriteScale) + 1)
 	for i = 1, middleCount do
-		love.graphics.draw(Block.grassMiddle[1], leftStart + i * 32 * Config.spriteScale, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+		love.graphics.draw(Block.grassMiddle[(i % 2) + 1], leftStart + i * 32 * Config.spriteScale, grassHeight, 0, Config.spriteScale, Config.spriteScale)
 	end
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
