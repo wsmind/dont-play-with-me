@@ -65,6 +65,10 @@ function Block:activate()
 	return self.excitement
 end
 
+function Block:getTopHeight()
+	return Config.blockBase - self.animHeight
+end
+
 function Block:draw()
 	love.graphics.setColor(self.color.x, self.color.y, self.color.z, self.color.w)
 	

@@ -18,7 +18,7 @@ function Hero.new(options)
 	self.velocity = vec2(0,0)
 	self.groundPlaneY = Config.virtualScreenHeight / 2
 	self.grounded = false
-	self.image = love.graphics.newImage("assets/bunny/Spritesheet.png")
+	self.image = love.graphics.newImage("assets/bunny/bunny.png")
 	self.image:setFilter("nearest", "nearest")
 	
 	local grid = anim8.newGrid(64, 64, self.image:getWidth(), self.image:getHeight())

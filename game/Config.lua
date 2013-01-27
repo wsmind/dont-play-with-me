@@ -30,7 +30,6 @@ Config = {
 	blockAnimSpeed = 3,
 	blockAnimSize = 10,
 	
-	
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
 	excitedColor = vec4(220, 16, 20, 255),
@@ -43,5 +42,8 @@ Config = {
 	cameraScrollSpeedMax = 500,
 	
 	-- Sound
-	soundFadeDuration = 8
+	soundFadeDuration = 8,
+	
+	-- Heart
+	heartScale = 2
 }
