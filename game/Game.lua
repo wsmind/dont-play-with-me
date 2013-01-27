@@ -61,7 +61,7 @@ function Game.new(options)
 	
 	-- music
 	self.soundtrack = Soundtrack.new{}
-	self.soundtrack:prepareCrossfade("tonight", "alpha")
+	self.soundtrack:prepareCrossfade("calm", "excite")
 	
     return self
 end
@@ -81,11 +81,11 @@ function Game:keyPressed(key, unicode)
 	end
 	
 	-- audio choice
-	if key == "1" then
+	--[[if key == "1" then
 		self.soundtrack:playOnly("alpha")
 	elseif key == "2" then
 		self.soundtrack:playOnly("tonight")
-	end
+	end]]--
 end
 
 function Game:keyReleased(key, unicode)
