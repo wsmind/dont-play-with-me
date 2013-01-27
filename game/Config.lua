@@ -49,5 +49,8 @@ Config = {
 	cameraScrollSpeedMax = 500,
 	
 	-- Sound
-	soundFadeDuration = 8
+	soundFadeDuration = 8,
+	
+	-- Heart
+	heartScale = 2
 }

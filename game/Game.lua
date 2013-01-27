@@ -6,6 +6,7 @@ require("math.num")
 require("game.Block")
 require("game.Config")
 require("game.Hero")
+require("game.Heart")
 require("game.Mood")
 require("game.Background")
 require("game.Soundtrack")
@@ -65,6 +66,17 @@ function Game.new(options)
 	-- music
 	self.soundtrack = Soundtrack.new{}
 	--self.soundtrack:prepareCrossfade("piano", "strings")
+	
+	-- hearts
+	self.hearts = {}
+	--[[for i = 0, 500 do
+		local heart = Heart.new{
+			pos = vec2(math.random() * 2000, math.random() * 1000 - 500)
+		}
+		table.insert(self.hearts, heart)
+	end]]--
+	
+	self.score = 0
 	
     return self
 end
@@ -138,6 +150,15 @@ function Game:update(dt)
 							self:spawnTextBlock(slope, block)
 						end
 					end
+					
+					-- spawn heart if it is worth it
+					local worth = self.mood:getHeartWorth() - 2
+					if math.random() < worth then
+						local heart = Heart.new{
+							pos = vec2(self.camera.x + 600, math.random() * 200 - 100)
+						}
+						table.insert(self.hearts, heart)
+					end
 				end
 			end
 		end
@@ -154,6 +175,21 @@ function Game:update(dt)
 	-- jumping
 	if love.keyboard.isDown("up") then
 		self.hero:jump()
+	end
+	
+	-- hearts
+	for i, heart in ipairs(self.hearts) do
+		heart:update(dt)
+		
+		-- check if the hero can pick this heart
+		if heart:tryToTake(self.hero:getBounds()) then
+			self.score = self.score + 1
+		end
+		
+		-- check if the heart object can be removed from the update list
+		if heart:canBeDestroyed() then
+			table.remove(self.hearts, i)
+		end
 	end
 	
 	-- scroll screen, function of the mood
@@ -182,6 +218,11 @@ function Game:draw()
 	
     -- move to camera position
     love.graphics.translate((self.virtualScreenHeight * 0.5 / self.zoom) * self.screenRatio - self.camera.x, (self.virtualScreenHeight * 0.5 / self.zoom) - self.camera.y)
+	
+	-- hearts
+	for _, heart in ipairs(self.hearts) do
+		heart:draw()
+	end
 	
 	-- draw hero
 	if self.collision then
@@ -218,6 +259,7 @@ function Game:draw()
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
 	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
+	love.graphics.print("Score: " .. self.score, 800, 100)
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
