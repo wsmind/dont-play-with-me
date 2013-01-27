@@ -10,6 +10,7 @@ require("game.Heart")
 require("game.Mood")
 require("game.Background")
 require("game.Soundtrack")
+require("game.TextBlock")
 
 Game = {}
 Game.__index = Game
@@ -22,6 +23,7 @@ function Game.new(options)
 	self.virtualScreenHeight = Config.virtualScreenHeight
     self.virtualScaleFactor = love.graphics.getHeight() / self.virtualScreenHeight
     self.screenRatio = love.graphics.getWidth() / love.graphics.getHeight()
+	self.virtualScreenWidth = self.screenRatio * self.virtualScreenHeight
     
 	love.graphics.setFont(love.graphics.newFont(40))
 	
@@ -32,15 +34,14 @@ function Game.new(options)
 	self.zoom = 1.0
 	
 	-- mood
-	self.mood = Mood.new{}
+	self.mood = Mood.new{
+		
+	}
 	
 	-- hero stuff
 	self.hero = Hero.new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
-	
-    --music = love.audio.newSource(gameConfig.sound.generaltheme)
-    --love.audio.play(music)
 	
 	-- blocks
 	self.blocks = {}
@@ -56,6 +57,9 @@ function Game.new(options)
 		currentX = currentX + options.width + Config.blockSpacing
 		table.insert(self.blocks, block)
 	end
+	
+	-- text blocks
+	self.textBlocks = {}
 	
 	-- background
 	self.background = Background.new{
@@ -74,6 +78,43 @@ function Game.new(options)
 		}
 		table.insert(self.hearts, heart)
 	end]]--
+	
+	-- text assets
+	self.feedbackTexts = {
+		{
+			slopeMin = 0,
+			slopeMax = 2,
+			texts = {
+				"Oh yes, that's it!",
+				"Apart from being pretty good in here, what do you do?",
+				"Wanna go watch a movie later?",
+				"Exactly like this!",
+				"Yep, you're doing pretty well.",
+				"That's quite fun!",
+				"Amusing.",
+				"I do like it.",
+				"I actually enjoy this.",
+				"Is it hot in here or is it just you?"
+			}
+		},
+		{
+			slopeMin = -2,
+			slopeMax = 0,
+			texts = {
+				"Um... okay... I'm not quite sure about that...",
+				"Could you just... stop acting like that?!",
+				"Woah, don't behave like an idiot.",
+				"Come on, really?",
+				"You're kidding me, aren't you?",
+				"Haha, funny. Now do it right.",
+				"Wait... seriously...?",
+				"Ok, um, yeah... well...No... no, i don't like it.",
+				"I do not like it. I do not like it at all.",
+				"No, really, I'm having more fun with myself.",
+				"Wake me up when something exciting happens."
+			}
+		}
+	}
 	
 	self.score = 0
 	
@@ -143,7 +184,12 @@ function Game:update(dt)
 			if self.hero:handleCollision(collisionInfo) then
 				local excitement = block:activate()
 				if excitement then
-					self.mood:influence(excitement)
+					local slope = self.mood:influence(excitement)
+					if slope then
+						if slope > 0 or slope < 0 then
+							self:spawnTextBlock(slope, block)
+						end
+					end
 					
 					-- spawn heart if it is worth it
 					local worth = self.mood:getHeartWorth() - 2
@@ -155,6 +201,14 @@ function Game:update(dt)
 					end
 				end
 			end
+		end
+	end
+	
+	-- text blocks
+	for key, tblock in ipairs(self.textBlocks) do
+		tblock:update(dt)
+		if tblock:getNeedsDispose() then
+			table.remove(self.textBlocks, key)
 		end
 	end
 	
@@ -226,6 +280,11 @@ function Game:draw()
 		end
 	end
 	
+	-- draw text blocks
+	for _, tblock in ipairs(self.textBlocks) do
+		tblock:draw()
+	end
+	
 	-- reset camera transform before hud drawing
 	love.graphics.pop()
 	
@@ -235,6 +294,8 @@ function Game:draw()
 	else
 		love.graphics.setColor(255, 255, 255, 255)
 	end
+	
+	-- Debug
 	love.graphics.print("YOU LOST", 50, 50)
 	love.graphics.print(self.mood.hSampleAverage, 100, 100)
 	love.graphics.print(self.mood.hSampleSD, 100, 150)
@@ -242,6 +303,37 @@ function Game:draw()
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
 	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
 	love.graphics.print("Score: " .. self.score, 800, 100)
+end
+
+function Game:spawnTextBlock(slope, targetBlock)
+	-- computes the text color
+	local ccolor = nil
+	if slope > 0 then
+		ccolor = Config.excitedColor
+	else
+		ccolor = Config.boredColor
+	end
+	
+	-- gets the text value depending on the slope
+	local textv = ""
+	for k,v in pairs(self.feedbackTexts) do
+		if slope > v.slopeMin and slope < v.slopeMax then
+			textv = v.texts[math.random(1, #v.texts)]
+			print(textv)
+		end
+	end
+	
+	-- other pos parameters
+	local blockTopHeight = targetBlock:getTopHeight() - 50
+	
+	-- adds the text on-screen
+	table.insert(self.textBlocks, TextBlock.new{
+				spawnPos = vec2(targetBlock.x, blockTopHeight),
+				anchorPos = self:_screenToWorld(vec2(3 * self.virtualScreenWidth / 4, self.virtualScreenHeight / 3)),
+				text = textv,
+				color = ccolor
+		}
+	)
 end
 
 function Game:_screenToWorld(vector)
