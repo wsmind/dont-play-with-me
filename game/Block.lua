@@ -8,6 +8,21 @@ require("game.Config")
 Block = {}
 Block.__index = Block
 
+function Block.loadResources()
+	Block.grassLeft = love.graphics.newImage("assets/grass/Gras-left01.png")
+	Block.grassLeft:setFilter("nearest", "nearest")
+	
+	Block.grassRight = love.graphics.newImage("assets/grass/Gras-right01.png")
+	Block.grassRight:setFilter("nearest", "nearest")
+	
+	Block.grassMiddle = {
+		love.graphics.newImage("assets/grass/Gras-middle01.png"),
+		love.graphics.newImage("assets/grass/Gras-middle02.png")
+	}
+	Block.grassMiddle[1]:setFilter("nearest", "nearest")
+	Block.grassMiddle[2]:setFilter("nearest", "nearest")
+end
+
 function Block.new(options)
     local self = {}
     setmetatable(self, Block)
@@ -73,6 +88,22 @@ function Block:draw()
 	love.graphics.setColor(self.color.x, self.color.y, self.color.z, self.color.w)
 	
 	love.graphics.rectangle("fill", self.x, Config.blockBase - self.animHeight, self.width, self.animHeight)
+	
+	-- grass
+	local grassColor = vec4(255, 255, 255, 255) * 0.7 + self.color * 0.3
+	local leftStart = self.x - Config.blockSpacing * 0.5
+	local leftEnd = leftStart + 32 * Config.spriteScale
+	local rightEnd = self.x + self.width + Config.blockSpacing * 0.5
+	local rightStart = rightEnd - 32 * Config.spriteScale
+	local grassHeight = Config.blockBase - self.animHeight - 16
+	love.graphics.setColor(grassColor:asTable())
+	love.graphics.draw(Block.grassLeft, leftStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+	love.graphics.draw(Block.grassRight, rightStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+	
+	local middleCount = math.floor((rightStart - leftEnd) / (32 * Config.spriteScale) + 1)
+	for i = 1, middleCount do
+		love.graphics.draw(Block.grassMiddle[(i % 2) + 1], leftStart + i * 32 * Config.spriteScale, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+	end
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
 end

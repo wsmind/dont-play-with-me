@@ -27,6 +27,8 @@ function Game.new(options)
     
 	love.graphics.setFont(love.graphics.newFont(40))
 	
+	Block.loadResources()
+	
 	-- camera
     self.camera = vec2(0, 0)
 	self.zoom = 1.0
@@ -52,7 +54,7 @@ function Game.new(options)
 			excitement = math.floor(math.random() * 2) * 2 - 1
 		}
 		local block = Block.new(options)
-		currentX = currentX + options.width + 10
+		currentX = currentX + options.width + Config.blockSpacing
 		table.insert(self.blocks, block)
 	end
 	
@@ -278,7 +280,10 @@ function Game:draw()
 	
 	-- draw blocks
 	for _, block in ipairs(self.blocks) do
-		block:draw()
+		-- basic culling
+		if (self.camera.x - 1000 < block.x) and (self.camera.x + 1000 > block.x) then
+			block:draw()
+		end
 	end
 	
 	-- draw text blocks
