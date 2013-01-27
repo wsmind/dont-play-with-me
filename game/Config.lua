@@ -40,5 +40,8 @@ Config = {
 	cameraShakeAmplitude = 20,
 	cameraShakeSpeed = 3,
 	cameraScrollSpeedMin = 300,
-	cameraScrollSpeedMax = 500
+	cameraScrollSpeedMax = 500,
+	
+	-- Sound
+	soundFadeDuration = 8
 }
