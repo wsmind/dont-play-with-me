@@ -284,7 +284,7 @@ function Game:update(dt)
 	
 	if self.timeout <= 0 then
 		self.timeout = 0
-		--self:gameOver()
+		self:gameOver()
 	end
 	
 	-- change player speed with mood
