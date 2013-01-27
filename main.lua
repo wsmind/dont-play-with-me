@@ -29,7 +29,7 @@ function love.keypressed(key, unicode)
 		love.event.push("quit")
     elseif intro.active then
 		intro:keyPressed(key, unicode)
-	elseif not intro.active and game then
+	else
 		game:keyPressed(key, unicode)
 	end
 end
@@ -37,8 +37,8 @@ end
 function love.keyreleased(key, unicode)
 	if intro.active then
 		intro:keyReleased(key, unicode)
-	elseif not intro.active and game then
-		game:keyPressed(key, unicode)
+	else
+		game:keyReleased(key, unicode)
 	end
 end
 
@@ -59,7 +59,7 @@ function love.update(dt)
 		
 		return
 		
-	elseif not intro.active and game then
+	else
 		game:update(dt)
 	end
 end
@@ -68,7 +68,7 @@ function love.draw()
 	if intro.active then
 		intro:draw()
 		return
-	elseif not intro.active and game then
+	else
 		game:draw()
 	end
 end
