@@ -6,6 +6,8 @@ require("math.vec2")
 require("math.vec4")
 
 Config = {
+	-- Intro configuration
+
 	-- Game space configuration 
 	virtualScreenHeight = 1080,
 	spriteScale = 2,
@@ -42,6 +44,7 @@ Config = {
 	boredColor = vec4(21, 19, 101, 255),
 	excitedColor = vec4(220, 16, 20, 255),
 	cBlank = vec4(0,0,0,255),
+	cLight = vec4(250, 245, 250 ,255),
 	
 	-- Camera
 	cameraShakeAmplitude = 20,
