@@ -14,7 +14,7 @@ function TextBlock.new(options)
 	self.anchorPos = options.anchorPos
 	self.color = options.color:asTable()
 	
-	self.pos = vec2(self.anchorPos.x, self.anchorPos.y)
+	self.pos = vec2(self.spawnPos.x, self.spawnPos.y)
 	
 	self.currentTime = 0
 	self.needsDispose = false
@@ -26,8 +26,7 @@ function TextBlock:update(dt)
 	self.currentTime = self.currentTime + dt
 	
 	-- interpolation from spawnPos to anchorPos
-	local spawnTime = Config.textBlockSpawnDuration - self.currentTime
-	print(spawnTime)
+	local spawnTime = math.abs(self.currentTime / Config.textBlockSpawnDuration)
 	if spawnTime >= 0 and spawnTime <= 1 then
 		self.pos = self.spawnPos:linearInterpolate(self.anchorPos, spawnTime)
 	end

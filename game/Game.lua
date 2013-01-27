@@ -23,6 +23,7 @@ function Game.new(options)
 	self.virtualScreenHeight = Config.virtualScreenHeight
     self.virtualScaleFactor = love.graphics.getHeight() / self.virtualScreenHeight
     self.screenRatio = love.graphics.getWidth() / love.graphics.getHeight()
+	self.virtualScreenWidth = self.screenRatio * self.virtualScreenHeight
     
 	love.graphics.setFont(love.graphics.newFont(40))
 	
@@ -270,9 +271,10 @@ function Game:spawnTextBlock(slope, targetBlock)
 		ccolor = Config.boredColor
 	end
 	
+	local blockTopHeight = targetBlock:getTopHeight() - 50
 	table.insert(self.textBlocks, TextBlock.new{
-				spawnPos = vec2(targetBlock.x, 0),
-				anchorPos = vec2(targetBlock.x + 300, targetBlock.height),
+				spawnPos = vec2(targetBlock.x, blockTopHeight),
+				anchorPos = self:_screenToWorld(vec2(3 * self.virtualScreenWidth / 4, self.virtualScreenHeight / 3)),
 				text = "oh t'es mimi",
 				color = ccolor
 		}
