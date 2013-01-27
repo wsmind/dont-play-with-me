@@ -254,8 +254,21 @@ function Game:update(dt)
 		end
 	end
 	
+	-- check screen boundaries
+	local leftScreenBound = self:_screenToWorld(vec2(0, 0)).x
+	local rightScreenBound = self:_screenToWorld(vec2(love.graphics.getWidth(), 0)).x
+	
+	if self.hero.pos.x < leftScreenBound then
+		--self:gameOver()
+	elseif self.hero.pos.x > rightScreenBound then
+		self.hero.pos.x = rightScreenBound
+	end
+	
+	-- change player speed with mood
+	Config.heroHorizontalSpeed = vec2(400,0) * (1 + self.mood.excitement)
+	Config.floatingSpeed = vec2(300 * (1 + self.mood.excitement), 100)
+	
 	-- scroll screen, function of the mood
-	--self.camera.x = self.camera.x + Config.cameraScrollSpeed  * dt
 	self.camera.x = self.camera.x + math.linearInterpolate(Config.cameraScrollSpeedMin, Config.cameraScrollSpeedMax, self.mood.excitement) * dt
 	
 	-- shake camera
