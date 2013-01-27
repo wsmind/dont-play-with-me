@@ -128,7 +128,9 @@ function Game:update(dt)
 			self.collision = true
 			if self.hero:handleCollision(collisionInfo) then
 				local excitement = block:activate()
-				self.mood:influence(excitement)
+				if excitement then
+					self.mood:influence(excitement)
+				end
 			end
 		end
 	end
@@ -187,6 +189,8 @@ function Game:draw()
 		love.graphics.setColor(255, 255, 255, 255)
 	end
 	love.graphics.print("YOU LOST", 50, 50)
+	love.graphics.print(self.mood.sampleAverage, 100, 100)
+	love.graphics.print(self.mood.sampleSD, 100, 150)
 end
 
 function Game:_screenToWorld(vector)

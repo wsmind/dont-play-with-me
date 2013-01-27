@@ -10,10 +10,10 @@ function Soundtrack.new(options)
     setmetatable(self, Soundtrack)
 	
 	self.tracks = {
-		alpha = love.audio.newSource("assets/music/LukHash - Alpha (mangatome edit).mp3", "static"),
-		tonight = love.audio.newSource("assets/music/LukHash - TONIGHT.mp3"),
-		calm = love.audio.newSource("assets/music/LukHash - TONIGHT (calm edit).mp3"),
-		excite = love.audio.newSource("assets/music/LukHash - TONIGHT (excite edit).mp3"),
+		--alpha = love.audio.newSource("assets/music/LukHash - Alpha (mangatome edit).mp3", "static"),
+		--tonight = love.audio.newSource("assets/music/LukHash - TONIGHT.mp3", "static"),
+		calm = love.audio.newSource("assets/music/LukHash - TONIGHT (calm edit).mp3", "static"),
+		excite = love.audio.newSource("assets/music/LukHash - TONIGHT (excite edit).mp3", "static"),
 	}
 	
 	self.crossfadeTracks = nil

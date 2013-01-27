@@ -55,7 +55,7 @@ end
 
 function Block:activate()
 	if self.activated then
-		return 0
+		return nil
 	end
 	
 	-- deactivate the block
