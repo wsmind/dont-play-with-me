@@ -12,8 +12,8 @@ function Soundtrack.new(options)
 	self.tracks = {
 		--alpha = love.audio.newSource("assets/music/LukHash - Alpha (mangatome edit).mp3", "static"),
 		--tonight = love.audio.newSource("assets/music/LukHash - TONIGHT.mp3", "static"),
-		calm = love.audio.newSource("assets/music/LukHash - TONIGHT (calm edit).mp3", "static"),
-		excite = love.audio.newSource("assets/music/LukHash - TONIGHT (excite edit).mp3", "static"),
+		--calm = love.audio.newSource("assets/music/LukHash - TONIGHT (calm edit).mp3", "static"),
+		--excite = love.audio.newSource("assets/music/LukHash - TONIGHT (excite edit).mp3", "static"),
 	}
 	
 	self.tracks2 = {
