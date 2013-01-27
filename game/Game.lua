@@ -61,7 +61,7 @@ function Game.new(options)
 	
 	-- music
 	self.soundtrack = Soundtrack.new{}
-	self.soundtrack:playOnly("alpha")
+	self.soundtrack:prepareCrossfade("tonight", "alpha")
 	
     return self
 end
@@ -144,6 +144,9 @@ function Game:update(dt)
 	
 	-- shake camera
 	self.camera.y = math.sin(love.timer.getTime() * Config.cameraShakeSpeed) * Config.cameraShakeAmplitude
+	
+	-- update sound crossfade
+	self.soundtrack:updateCrossfade(self.mood.excitement)
 end
 
 function Game:draw()

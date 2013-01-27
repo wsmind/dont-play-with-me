@@ -14,6 +14,8 @@ function Soundtrack.new(options)
 		tonight = love.audio.newSource("assets/music/LukHash - TONIGHT.mp3")
 	}
 	
+	self.crossfadeTracks = nil
+	
 	self:startAllMute()
 	
     return self
@@ -33,9 +35,38 @@ function Soundtrack:playOnly(trackName)
 	
 end
 
+function Soundtrack:prepareCrossfade(trackNameA, trackNameB)
+	-- stops current sounds
+	if not (self.crossfadeTracks == nil) then
+		self.crossfadeTracks.trackA:stop()
+		self.crossfadeTracks.trackB:stop()
+	end
+	
+	-- starts sounds
+	local ta = self.tracks[trackNameA]
+	local tb = self.tracks[trackNameB]
+	self.crossfadeTracks = {
+		trackA = ta,
+		trackB = tb
+	}
+	ta:play()
+	tb:play()
+	ta:setVolume(1)
+	tb:setVolume(0)
+end
+
+function Soundtrack:updateCrossfade(crossfade)
+	if self.crossfadeTracks == nil then
+		return
+	end
+	
+	-- updates crossfade volumes
+	self.crossfadeTracks.trackA:setVolume(1 - crossfade)
+	self.crossfadeTracks.trackB:setVolume(crossfade)
+end
+
 function Soundtrack:startAllMute()
 	for _, source in pairs(self.tracks) do
-		--source:setVolumeLimits(0,1)
 		love.audio.play(source)
 		source:setVolume(0)
 		source:setLooping(true)
