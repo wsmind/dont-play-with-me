@@ -56,7 +56,7 @@ function Block:update(dt)
 	
 	if self.activated then
 		self.activationTime = self.activationTime + dt
-		self.color = vec4(20, 20, 20, 255) + vec4(235, 235, 235, 0) * math.exp(-self.activationTime * 2)
+		self.color = vec4(10, 10, 10, 255) + vec4(245, 245, 245, 0) * math.exp(-self.activationTime * 2)
 	end
 	
 	self.animHeight = self.height + math.sin(love.timer.getTime() * Config.blockAnimSpeed + self.animPhase) * Config.blockAnimSize

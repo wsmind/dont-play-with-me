@@ -27,7 +27,7 @@ function Hero.new(options)
 		walk = anim8.newAnimation("loop", grid(1, 1, 2, 1), 0.2),
 		jump = anim8.newAnimation("once", grid(1, 3, 2, 3, 3, 3), 0.2),
 		fall = anim8.newAnimation("loop", grid(4, 3), 0.2),
-		float = anim8.newAnimation("loop", grid(1, 4, 2, 4), 0.2)
+		float = anim8.newAnimation("loop", grid(1, 4, 2, 4), 0.4)
 	}
 	self:playAnimation("idle")
 	self.animationSide = 1
@@ -86,6 +86,7 @@ end
 function Hero:update(dt)
 	-- animation state
 	if self.grounded then
+		self.floating = false
 		if math.abs(self.velocity.x) > 0 then
 			self:playAnimation("walk")
 		else
@@ -94,6 +95,8 @@ function Hero:update(dt)
 	else
 		if self.velocity.y < 0 then
 			self:playAnimation("jump")
+		elseif self.floating then
+			self:playAnimation("float")
 		else
 			self:playAnimation("fall")
 		end
@@ -107,6 +110,10 @@ function Hero:update(dt)
 	
 	-- position update
 	self.pos = self.pos + self.velocity * dt
+	if (self.velocity.y > 0) and self.floating then
+		-- limit fall speed when floating
+		self.velocity = self.velocity:min(Config.floatingSpeed)
+	end
 	
 	-- ground hack
 	if (self.pos.y) >= self.groundPlaneY - 16 then
@@ -124,6 +131,18 @@ function Hero:jump()
 	end
 	
 	self.velocity.y = -Config.heroVerticalSpeed
+end
+
+function Hero:startFloating()
+	if self.grounded then
+		return
+	end
+	
+	self.floating = true
+end
+
+function Hero:stopFloating()
+	self.floating = false
 end
 
 function Hero:draw()

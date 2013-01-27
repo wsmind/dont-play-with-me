@@ -137,6 +137,8 @@ function Game:keyPressed(key, unicode)
 		self.heroMovesLeft = true
 	elseif key == "right" then
 		self.heroMovesRight = true
+	elseif key == " " then
+		self.hero:startFloating()
 	end
 	
 	-- audio choice
@@ -153,6 +155,8 @@ function Game:keyReleased(key, unicode)
 		self.heroMovesLeft = false
 	elseif key == "right" then
 		self.heroMovesRight = false
+	elseif key == " " then
+		self.hero:stopFloating()
 	end
 end
 
