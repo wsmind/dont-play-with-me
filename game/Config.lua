@@ -8,6 +8,7 @@ require("math.vec4")
 Config = {
 	-- Game space configuration 
 	virtualScreenHeight = 1080,
+	spriteScale = 2,
 	
 	-- Gameplay configuration
 	maxHeartWorth = 3, -- How much hearts the player is worth (max)
@@ -17,21 +18,21 @@ Config = {
 	heroVerticalSpeed = 1000, -- How much the hero moves when it's jumping upwards (px/s)
 	heroJumpDuration = 1, -- How long does the ascending part of the jump last, in seconds
 	gravity = vec2(0, 2000), -- Strenght of the gravity
-	rabbitScale = 2,
 	
 	-- Background
 	bgPulseColorAmplitude = 10, -- How much the color pulses, in color space.
 	bgPulseColorSpeed = 3, -- How many pulses per second (full circle).
 	
 	-- Blocks
-	blockWidth = 120,
-	blockWidthVariation = 100,
+	blockWidth = 128,
+	blockWidthVariation = 64,
 	blockHeight = 350,
 	blockHeightVariation = 200,
 	blockColorVariation = 15,
-	blockBase = 600,
 	blockAnimSpeed = 3,
 	blockAnimSize = 10,
+	blockBase = 600,	
+	blockSpacing = 10,	
 	
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
@@ -46,7 +47,5 @@ Config = {
 	
 	-- Sound
 	soundFadeDuration = 8,
-	
-	-- Heart
-	heartScale = 2
+
 }

@@ -36,7 +36,7 @@ function Hero.new(options)
 end
 
 function Hero:getBounds()
-	local extent = vec2(16, 16) * Config.rabbitScale
+	local extent = vec2(16, 16) * Config.spriteScale
 	return aabb(self.pos - extent, self.pos + extent)
 end
 
@@ -132,7 +132,7 @@ function Hero:draw()
 	if self.animationSide < 0 then
 		headPosition = vec2(16, 48)
 	end
-	self.currentAnimation:draw(self.image, self.pos.x, self.pos.y, 0, Config.rabbitScale, Config.rabbitScale, headPosition.x, headPosition.y)
+	self.currentAnimation:draw(self.image, self.pos.x, self.pos.y, 0, Config.spriteScale, Config.spriteScale, headPosition.x, headPosition.y)
 	
 	--local bounds = self:getBounds()
 	--bounds:drawDebug(255, 0, 0, 255)

@@ -17,7 +17,7 @@ function Heart.new(options)
 	self.pos = options.pos
 	
 	local extent = vec2(8, 8)
-	self.aabb = aabb(self.pos - extent * Config.heartScale, self.pos + extent * Config.heartScale)
+	self.aabb = aabb(self.pos - extent * Config.spriteScale, self.pos + extent * Config.spriteScale)
 	
 	self.image = love.graphics.newImage("assets/heart/Heart.png")
 	self.image:setFilter("nearest", "nearest")
@@ -78,7 +78,7 @@ end
 
 function Heart:draw()
 	love.graphics.setColor(255, 255, 255, 255)
-	self.currentAnimation:draw(self.image, self.pos.x, self.pos.y, 0, Config.heartScale, Config.heartScale, 16, 16)
+	self.currentAnimation:draw(self.image, self.pos.x, self.pos.y, 0, Config.spriteScale, Config.spriteScale, 16, 16)
 	
 	--self.aabb:drawDebug(255, 0, 0, 255)
 end
