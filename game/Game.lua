@@ -30,6 +30,16 @@ function Game.new(options)
 	
 	Block.loadResources()
 	
+	-- music
+	self.soundtrack = Soundtrack.new{}
+	--self.soundtrack:prepareCrossfade("piano", "strings")
+	
+	self.soundtrack:startAllMute()
+	
+    return self
+end
+
+function Game:start()
 	-- camera
     self.camera = vec2(0, 0)
 	self.zoom = 1.0
@@ -66,10 +76,6 @@ function Game.new(options)
 	self.background = Background.new{
 		mood = self.mood
 	}
-	
-	-- music
-	self.soundtrack = Soundtrack.new{}
-	--self.soundtrack:prepareCrossfade("piano", "strings")
 	
 	-- hearts
 	self.hearts = {}
@@ -136,11 +142,6 @@ function Game.new(options)
 	
 	self.score = 0
 	
-    return self
-end
-
-function Game:start()
-	self.soundtrack:startAllMute()
 	self.timeout = Config.levelDuration
 end
 
@@ -151,6 +152,10 @@ function Game:mouseReleased(x, y, button)
 end
 
 function Game:keyPressed(key, unicode)
+	if self.isGameOver then
+		self:start()
+	end
+	
 	-- hero movement
 	if key == "left" then
 		self.heroMovesLeft = true

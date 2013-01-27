@@ -14,7 +14,7 @@ Config = {
 	
 	-- Gameplay configuration
 	maxHeartWorth = 3, -- How much hearts the player is worth (max)
-	levelDuration = 5,
+	levelDuration = 60,
 	
 	-- Text blocks
 	textBlockDurationOnScreen = 5, -- in seconds
