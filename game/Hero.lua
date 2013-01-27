@@ -156,6 +156,6 @@ function Hero:draw()
 	--local bounds = self:getBounds()
 	--bounds:drawDebug(255, 0, 0, 255)
 	
-	love.graphics.setColor(255, 0, 0, 255)
-	love.graphics.print(self.pos.y, -150, -150)
+	--love.graphics.setColor(255, 0, 0, 255)
+	--love.graphics.print(self.pos.y, -150, -150)
 end

@@ -141,6 +141,7 @@ end
 
 function Game:start()
 	self.soundtrack:startAllMute()
+	self.timeout = Config.levelDuration
 end
 
 function Game:mousePressed(x, y, button)
@@ -190,6 +191,9 @@ function Game:update(dt)
 	
 	-- background
 	self.background:update(dt)
+	
+	-- level time
+	self.timeout = self.timeout - dt
 	
 	-- updates hero
 	local heroTotalMove = vec2(0,0)
@@ -278,6 +282,11 @@ function Game:update(dt)
 		self.hero.pos.x = rightScreenBound
 	end
 	
+	if self.timeout <= 0 then
+		self.timeout = 0
+		--self:gameOver()
+	end
+	
 	-- change player speed with mood
 	Config.heroHorizontalSpeed = vec2(400,0) * (1 + self.mood.excitement)
 	Config.floatingSpeed = vec2(300 * (1 + self.mood.excitement), 100)
@@ -343,21 +352,17 @@ function Game:draw()
 	-- reset camera transform before hud drawing
 	love.graphics.pop()
 	
-	-- HUD
-	if self.hero.grounded then
-		love.graphics.setColor(0, 0, 255, 255)
-	else
-		love.graphics.setColor(255, 255, 255, 255)
-	end
+	love.graphics.setColor(220, 220, 200, 200)
+	love.graphics.print(self.score .. " hearts", 800, 50)
+	love.graphics.print(math.floor(self.timeout), 50, 50)
 	
 	-- Debug
-	love.graphics.print("YOU LOST", 50, 50)
+	--[[love.graphics.print("YOU LOST", 50, 50)
 	love.graphics.print(self.mood.hSampleAverage, 100, 100)
 	love.graphics.print(self.mood.hSampleSD, 100, 150)
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
-	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
-	love.graphics.print("Score: " .. self.score, 800, 100)
+	love.graphics.print(self.mood:getHeartWorth(), 100, 300)]]--
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
