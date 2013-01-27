@@ -9,6 +9,7 @@ require("game.Hero")
 require("game.Mood")
 require("game.Background")
 require("game.Soundtrack")
+require("game.TextBlock")
 
 Game = {}
 Game.__index = Game
@@ -29,15 +30,14 @@ function Game.new(options)
 	self.zoom = 1.0
 	
 	-- mood
-	self.mood = Mood.new{}
+	self.mood = Mood.new{
+		
+	}
 	
 	-- hero stuff
 	self.hero = Hero.new{}
 	self.heroMovesLeft = false
 	self.heroMovesRight = false
-	
-    --music = love.audio.newSource(gameConfig.sound.generaltheme)
-    --love.audio.play(music)
 	
 	-- blocks
 	self.blocks = {}
@@ -53,6 +53,9 @@ function Game.new(options)
 		currentX = currentX + options.width + 10
 		table.insert(self.blocks, block)
 	end
+	
+	-- text blocks
+	self.textBlocks = {}
 	
 	-- background
 	self.background = Background.new{
@@ -129,9 +132,22 @@ function Game:update(dt)
 			if self.hero:handleCollision(collisionInfo) then
 				local excitement = block:activate()
 				if excitement then
-					self.mood:influence(excitement)
+					local slope = self.mood:influence(excitement)
+					if slope then
+						if slope > 0 or slope < 0 then
+							self:spawnTextBlock(slope, block)
+						end
+					end
 				end
 			end
+		end
+	end
+	
+	-- text blocks
+	for key, tblock in ipairs(self.textBlocks) do
+		tblock:update(dt)
+		if tblock:getNeedsDispose() then
+			table.remove(self.textBlocks, key)
 		end
 	end
 	
@@ -180,6 +196,11 @@ function Game:draw()
 		block:draw()
 	end
 	
+	-- draw text blocks
+	for _, tblock in ipairs(self.textBlocks) do
+		tblock:draw()
+	end
+	
 	-- reset camera transform before hud drawing
 	love.graphics.pop()
 	
@@ -189,12 +210,31 @@ function Game:draw()
 	else
 		love.graphics.setColor(255, 255, 255, 255)
 	end
+	
+	-- Debug
 	love.graphics.print("YOU LOST", 50, 50)
 	love.graphics.print(self.mood.hSampleAverage, 100, 100)
 	love.graphics.print(self.mood.hSampleSD, 100, 150)
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
 	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
+end
+
+function Game:spawnTextBlock(slope, targetBlock)
+	local ccolor = nil
+	if slope > 0 then
+		ccolor = Config.excitedColor
+	else
+		ccolor = Config.boredColor
+	end
+	
+	table.insert(self.textBlocks, TextBlock.new{
+				spawnPos = vec2(targetBlock.x, 0),
+				anchorPos = vec2(targetBlock.x + 300, targetBlock.height),
+				text = "oh t'es mimi",
+				color = ccolor
+		}
+	)
 end
 
 function Game:_screenToWorld(vector)

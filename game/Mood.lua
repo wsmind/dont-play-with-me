@@ -34,9 +34,10 @@ function Mood.new(options)
 	self.iExcitementInfluenceRatio = 0 -- proportion of excitement
 	
 	-- sample collection for the pattern
-	self.pSampleCount = 16
+	self.pSampleCount = 4
 	self.pSamples = {}
 	self.pSampleAnalysisHistory = {}
+	self.pLastSampleAnalysis = 0
 	
     return self
 end
@@ -44,6 +45,7 @@ end
 -- Influences the mood by a quantity.
 -- Negative quantities influence the mood towards boredom, and positive quantities
 -- towards excitement.
+-- Returns a recognized pattern, or nil if none is recognized so far
 function Mood:influence(quantity)
 	-- update excitement
 	self.excitement = math.clamp(self.excitement + quantity * self.blockInflunceOnExcitement, 0, 1)
@@ -51,7 +53,13 @@ function Mood:influence(quantity)
 	-- collects the samples
 	--self:collectHeartExcitementSamples()
 	self:collectHeartInfluenceSamples(quantity)
-	self:collectPatternSamples()
+	local slope = self:collectPatternSamples()
+	if not (slope == nil) then
+		self.pLastSampleAnalysis = slope
+	end
+	
+	-- returns an event?
+	return slope
 end
 
 -- Returns the color which fits the best the current mood.
@@ -126,20 +134,15 @@ function Mood:collectPatternSamples()
 		
 		-- clears the table
 		self.pSamples = {}
+		
+		return slope
+	else
+		return nil
 	end
 end
 
 function Mood:getLastPatternSlope()
-	if #self.pSampleAnalysisHistory == 0 then
-		return 0
-	else 
-		local v = self.pSampleAnalysisHistory[#self.pSampleAnalysisHistory - 1]
-		if v == nil then
-			return 0
-		else 
-			return v
-		end
-	end
+	return self.pLastSampleAnalysis
 end
 
 function Mood:getPatternSamplesSlope(samples)

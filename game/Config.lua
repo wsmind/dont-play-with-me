@@ -12,6 +12,10 @@ Config = {
 	-- Gameplay configuration
 	maxHeartWorth = 3, -- How much hearts the player is worth (max)
 	
+	-- Text blocks
+	textBlockDurationOnScreen = 5, -- in seconds
+	textBlockSpawnDuration = 0.5, -- in seconds
+	
 	-- Player avatar configuration
 	heroHorizontalSpeed = vec2(500,0), -- How much the hero moves when it's walking to the right (px/s)
 	heroVerticalSpeed = 1000, -- How much the hero moves when it's jumping upwards (px/s)
@@ -32,8 +36,7 @@ Config = {
 	blockBase = 600,
 	blockAnimSpeed = 3,
 	blockAnimSize = 10,
-	
-	
+
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
 	excitedColor = vec4(220, 16, 20, 255),

@@ -70,6 +70,10 @@ local mt = {
 			if v.x > max.x then max.x = v.x end
 			if v.y > max.y then max.y = v.y end
 			return max
+		end,
+		
+		linearInterpolate = function(self, v, t)
+			return self * (1 - t) + v * t
 		end
 	}
 }
