@@ -21,6 +21,9 @@ function Block.loadResources()
 	}
 	Block.grassMiddle[1]:setFilter("nearest", "nearest")
 	Block.grassMiddle[2]:setFilter("nearest", "nearest")
+	
+	Block.activationSound = love.audio.newSource("assets/sfx/block-activation.mp3", "static")
+	Block.activationSound:setVolume(0.5)
 end
 
 function Block.new(options)
@@ -74,9 +77,10 @@ function Block:activate()
 		return nil
 	end
 	
-	-- deactivate the block
+	-- activate the block
 	self.activated = true
 	self.color = vec4(20, 20, 20, 255)
+	Block.activationSound:play()
 	
 	return self.excitement
 end
