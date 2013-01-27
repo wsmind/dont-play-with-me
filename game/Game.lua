@@ -136,6 +136,7 @@ end
 
 function Game:start()
 	self.soundtrack:startAllMute()
+	self.timeout = Config.levelDuration
 end
 
 function Game:mousePressed(x, y, button)
@@ -327,21 +328,16 @@ function Game:draw()
 	-- reset camera transform before hud drawing
 	love.graphics.pop()
 	
-	-- HUD
-	if self.hero.grounded then
-		love.graphics.setColor(0, 0, 255, 255)
-	else
-		love.graphics.setColor(255, 255, 255, 255)
-	end
+	love.graphics.setColor(220, 220, 200, 200)
+	love.graphics.print(self.score .. " hearts", 800, 50)
 	
 	-- Debug
-	love.graphics.print("YOU LOST", 50, 50)
+	--[[love.graphics.print("YOU LOST", 50, 50)
 	love.graphics.print(self.mood.hSampleAverage, 100, 100)
 	love.graphics.print(self.mood.hSampleSD, 100, 150)
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
-	love.graphics.print(self.mood:getHeartWorth(), 100, 300)
-	love.graphics.print("Score: " .. self.score, 800, 100)
+	love.graphics.print(self.mood:getHeartWorth(), 100, 300)]]--
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
