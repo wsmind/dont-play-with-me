@@ -9,6 +9,9 @@ Config = {
 	-- Game space configuration 
 	virtualScreenHeight = 1080,
 	
+	-- Gameplay configuration
+	maxHeartWorth = 3, -- How much hearts the player is worth (max)
+	
 	-- Player avatar configuration
 	heroHorizontalSpeed = vec2(500,0), -- How much the hero moves when it's walking to the right (px/s)
 	heroVerticalSpeed = 1000, -- How much the hero moves when it's jumping upwards (px/s)
