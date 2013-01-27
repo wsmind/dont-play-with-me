@@ -45,8 +45,8 @@ function Game.new(options)
 	
 	-- blocks
 	self.blocks = {}
-	local currentX = 0
-	for i = 0, 500 do
+	local currentX = -1000
+	for i = 0, 1000 do
 		local options = {
 			x = currentX,
 			width = Config.blockWidth + Config.blockWidthVariation * (math.random() - 0.5),
@@ -198,28 +198,31 @@ function Game:update(dt)
 	
 	-- blocks
 	for _, block in ipairs(self.blocks) do
-		block:update(dt)
-		
-		local collisionInfo = block:collide(self.hero:getBounds())
-		if collisionInfo then
-			self.collision = true
-			if self.hero:handleCollision(collisionInfo) then
-				local excitement = block:activate()
-				if excitement then
-					local slope = self.mood:influence(excitement)
-					if slope then
-						if slope > 0 or slope < 0 then
-							self:spawnTextBlock(slope, block)
+		-- basic culling
+		if (self.camera.x - 1000 < block.x) and (self.camera.x + 1000 > block.x) then
+			block:update(dt)
+			
+			local collisionInfo = block:collide(self.hero:getBounds())
+			if collisionInfo then
+				self.collision = true
+				if self.hero:handleCollision(collisionInfo) then
+					local excitement = block:activate()
+					if excitement then
+						local slope = self.mood:influence(excitement)
+						if slope then
+							if slope > 0 or slope < 0 then
+								self:spawnTextBlock(slope, block)
+							end
 						end
-					end
-					
-					-- spawn heart if it is worth it
-					local worth = self.mood:getHeartWorth() - 2
-					if math.random() < worth then
-						local heart = Heart.new{
-							pos = vec2(self.camera.x + 600, math.random() * 200 - 100)
-						}
-						table.insert(self.hearts, heart)
+						
+						-- spawn heart if it is worth it
+						local worth = self.mood:getHeartWorth() - 2
+						if math.random() < worth then
+							local heart = Heart.new{
+								pos = vec2(self.camera.x + 600, math.random() * 200 - 100)
+							}
+							table.insert(self.hearts, heart)
+						end
 					end
 				end
 			end

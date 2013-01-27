@@ -34,6 +34,7 @@ function Block.new(options)
 	self.activated = false
 	self.activationTime = 0
 	self.animPhase = math.random() * 2 * math.pi
+	self.animHeight = 0
 	
 	-- get the color from the excitement
 	if self.excitement > 0 then
