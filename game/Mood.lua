@@ -5,6 +5,7 @@
 require("math.vec4")
 require("math.num")
 require("lib.simplestat")
+require("game.Config")
 
 Mood = {}
 Mood.__index = Mood
@@ -64,7 +65,7 @@ function Mood:getHeartWorth()
 	local r = self.iExcitementInfluenceRatio
 	local dr = math.min(math.abs(r - 1/3), math.abs(r - 2/3))
 	
-	return 3 * (1 - 3 * dr)
+	return Config.maxHeartWorth * (1 - 3 * dr)
 end
 
 function Mood:update(dt)
