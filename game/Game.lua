@@ -182,6 +182,9 @@ function Game:update(dt)
 	-- background
 	self.background:update(dt)
 	
+	-- level time
+	self.timeout = self.timeout - dt
+	
 	-- updates hero
 	local heroTotalMove = vec2(0,0)
 	if self.heroMovesLeft then
@@ -268,6 +271,11 @@ function Game:update(dt)
 		self.hero.pos.x = rightScreenBound
 	end
 	
+	if self.timeout <= 0 then
+		self.timeout = 0
+		--self:gameOver()
+	end
+	
 	-- change player speed with mood
 	Config.heroHorizontalSpeed = vec2(400,0) * (1 + self.mood.excitement)
 	Config.floatingSpeed = vec2(300 * (1 + self.mood.excitement), 100)
@@ -330,6 +338,7 @@ function Game:draw()
 	
 	love.graphics.setColor(220, 220, 200, 200)
 	love.graphics.print(self.score .. " hearts", 800, 50)
+	love.graphics.print(math.floor(self.timeout), 50, 50)
 	
 	-- Debug
 	--[[love.graphics.print("YOU LOST", 50, 50)
