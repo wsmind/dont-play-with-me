@@ -85,33 +85,46 @@ function Game.new(options)
 			slopeMin = 0,
 			slopeMax = 2,
 			texts = {
-				"Oh yes, that's it!",
+				--"Oh yes, that's it!",
 				"Apart from being pretty good in here, what do you do?",
 				"Wanna go watch a movie later?",
-				"Exactly like this!",
-				"Yep, you're doing pretty well.",
-				"That's quite fun!",
-				"Amusing.",
-				"I do like it.",
+				--"Exactly like this!",
+				--"Yep, you're doing pretty well.",
+				--"That's quite fun!",
+				--"Amusing.",
+				--"I do like it.",
 				"I actually enjoy this.",
-				"Is it hot in here or is it just you?"
+				"Is it hot in here or is it just you?",
+				"You're so funny!",
+				"You're so charming!",
+				"Here's my number! So call me, maybe...",
+				"That was so... oh-my-god."
 			}
 		},
 		{
 			slopeMin = -2,
 			slopeMax = 0,
 			texts = {
-				"Um... okay... I'm not quite sure about that...",
-				"Could you just... stop acting like that?!",
-				"Woah, don't behave like an idiot.",
-				"Come on, really?",
+				--"Um... okay... I'm not quite sure about that...",
+				"A date? Um... I'm not sure...",
+				--"Could you just... stop acting like that?!",
+				--"Woah, don't behave like an idiot.",
+				--"Come on, really?",
+				"Are you for real?!",
 				"You're kidding me, aren't you?",
-				"Haha, funny. Now do it right.",
-				"Wait... seriously...?",
-				"Ok, um, yeah... well...No... no, i don't like it.",
-				"I do not like it. I do not like it at all.",
+				"You're such a kid.",
+				"You're weird.",
+				--"Haha, funny. Now do it right.",
+				--"Wait... seriously...?",
+				--"Ok, um, yeah... well...No... no, i don't like it.",
+				"That was awkward.",
+				--"I do not like it. I do not like it at all.",
 				"No, really, I'm having more fun with myself.",
-				"Wake me up when something exciting happens."
+				"I want to go home now.",
+				"I can't see you, I'm pretty busy right now.",
+				"We could go for a coffee next month.",
+				"Who are you again?"
+				--"Wake me up when something exciting happens."
 			}
 		}
 	}
@@ -312,13 +325,13 @@ function Game:draw()
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
-	-- computes the text color
+	--[[-- computes the text color
 	local ccolor = nil
 	if slope > 0 then
 		ccolor = Config.excitedColor
 	else
 		ccolor = Config.boredColor
-	end
+	end]]--
 	
 	-- gets the text value depending on the slope
 	local textv = ""
@@ -337,7 +350,7 @@ function Game:spawnTextBlock(slope, targetBlock)
 				spawnPos = vec2(targetBlock.x, blockTopHeight),
 				anchorPos = self:_screenToWorld(vec2(3 * self.virtualScreenWidth / 4, self.virtualScreenHeight / 3)),
 				text = textv,
-				color = ccolor
+				color = Config.cLight
 		}
 	)
 end
