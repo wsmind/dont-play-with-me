@@ -119,6 +119,10 @@ function Game.new(options)
     return self
 end
 
+function Game:start()
+	self.soundtrack:startAllMute()
+end
+
 function Game:mousePressed(x, y, button)
 end
 
@@ -151,6 +155,7 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
+
 	-- mood
 	self.mood:update(dt)
 	
@@ -243,6 +248,7 @@ function Game:update(dt)
 end
 
 function Game:draw()
+
     -- draw background
 	self.background:draw()
 	

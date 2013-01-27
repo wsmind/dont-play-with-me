@@ -41,7 +41,7 @@ function Soundtrack.new(options)
 	
 	self.crossfadeTracks = nil
 	
-	self:startAllMute()
+	--self:startAllMute()
 	
     return self
 end
