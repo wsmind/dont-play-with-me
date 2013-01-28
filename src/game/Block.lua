@@ -9,19 +9,36 @@ Block = {}
 Block.__index = Block
 
 function Block.loadResources()
-	Block.grassLeft = love.graphics.newImage("assets/grass/Gras-left01.png")
-	Block.grassLeft:setFilter("nearest", "nearest")
 	
-	Block.grassRight = love.graphics.newImage("assets/grass/Gras-right01.png")
-	Block.grassRight:setFilter("nearest", "nearest")
-	
-	Block.grassMiddle = {
-		love.graphics.newImage("assets/grass/Gras-middle01.png"),
-		love.graphics.newImage("assets/grass/Gras-middle02.png")
+	Block.grassStyles = {
+		-- short
+		{
+			left = love.graphics.newImage("assets/grass/Gras-left01.png"),
+			right = love.graphics.newImage("assets/grass/Gras-right01.png"),
+			middle = {
+				love.graphics.newImage("assets/grass/Gras-middle01.png"),
+				love.graphics.newImage("assets/grass/Gras-middle02.png")
+			}
+		},
+		
+		-- long
+		{
+			left = love.graphics.newImage("assets/grass/Gras-left01_long.png"),
+			right = love.graphics.newImage("assets/grass/Gras-right01_long.png"),
+			middle = {
+				love.graphics.newImage("assets/grass/Gras-middle01_long.png"),
+				love.graphics.newImage("assets/grass/Gras-middle02_long.png")
+			}
+		}
 	}
-	Block.grassMiddle[1]:setFilter("nearest", "nearest")
-	Block.grassMiddle[2]:setFilter("nearest", "nearest")
 	
+	for _,v in ipairs(Block.grassStyles) do
+		v.left:setFilter("nearest", "nearest")
+		v.right:setFilter("nearest", "nearest")
+		v.middle[1]:setFilter("nearest", "nearest")
+		v.middle[2]:setFilter("nearest", "nearest")
+	end
+
 	Block.activationSound = love.audio.newSource("assets/sfx/block-activation.mp3", "static")
 	Block.activationSound:setVolume(0.5)
 end
@@ -38,6 +55,9 @@ function Block.new(options)
 	self.activationTime = 0
 	self.animPhase = math.random() * 2 * math.pi
 	self.animHeight = 0
+	
+	-- choose grass
+	self.grass = Block.grassStyles[math.floor(math.random(1, #Block.grassStyles))]
 	
 	-- get the color from the excitement
 	if self.excitement > 0 then
@@ -102,12 +122,12 @@ function Block:draw()
 	local rightStart = rightEnd - 32 * Config.spriteScale
 	local grassHeight = Config.blockBase - self.animHeight - 16
 	love.graphics.setColor(grassColor:asTable())
-	love.graphics.draw(Block.grassLeft, leftStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
-	love.graphics.draw(Block.grassRight, rightStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+	love.graphics.draw(self.grass["left"], leftStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+	love.graphics.draw(self.grass["right"], rightStart, grassHeight, 0, Config.spriteScale, Config.spriteScale)
 	
 	local middleCount = math.floor((rightStart - leftEnd) / (32 * Config.spriteScale) + 1)
 	for i = 1, middleCount do
-		love.graphics.draw(Block.grassMiddle[(i % 2) + 1], leftStart + i * 32 * Config.spriteScale, grassHeight, 0, Config.spriteScale, Config.spriteScale)
+		love.graphics.draw(self.grass["middle"][(i % 2) + 1], leftStart + i * 32 * Config.spriteScale, grassHeight, 0, Config.spriteScale, Config.spriteScale)
 	end
 	
 	--self.aabb:drawDebug(255, 255, 255, 255)
