@@ -26,7 +26,7 @@ function Game.new(options)
     self.screenRatio = love.graphics.getWidth() / love.graphics.getHeight()
 	self.virtualScreenWidth = self.screenRatio * self.virtualScreenHeight
     
-	love.graphics.setFont(love.graphics.newFont(40))
+	self.font = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf",40)
 	
 	Block.loadResources()
 	
@@ -152,7 +152,7 @@ function Game:mouseReleased(x, y, button)
 end
 
 function Game:keyPressed(key, unicode)
-	if self.isGameOver then
+	if self.isGameOver and key == "return" then
 		self:start()
 	end
 	
@@ -281,7 +281,7 @@ function Game:update(dt)
 	local rightScreenBound = self:_screenToWorld(vec2(love.graphics.getWidth(), 0)).x
 	
 	if self.hero.pos.x < leftScreenBound then
-		self:gameOver()
+		self:gameOver(true)
 		return
 	elseif self.hero.pos.x > rightScreenBound then
 		self.hero.pos.x = rightScreenBound
@@ -289,7 +289,7 @@ function Game:update(dt)
 	
 	if self.timeout <= 0 then
 		self.timeout = 0
-		self:gameOver()
+		self:gameOver(false)
 	end
 	
 	-- change player speed with mood
@@ -308,6 +308,8 @@ function Game:update(dt)
 end
 
 function Game:draw()
+
+	love.graphics.setFont(self.font)
 
 	if self.isGameOver then
 		self.gameOverScene:draw()
@@ -368,6 +370,7 @@ function Game:draw()
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
 	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
 	love.graphics.print(self.mood:getHeartWorth(), 100, 300)]]--
+	--love.graphics.print(self.mood.excitementAverage, 100, 300)
 end
 
 function Game:spawnTextBlock(slope, targetBlock)
@@ -407,7 +410,7 @@ function Game:_screenToWorld(vector)
     return relativePosition + self.camera
 end
 
-function Game:gameOver()
+function Game:gameOver(playerFault)
 	self.gameOverScene = GameOverScene.new{
 		mood = self.mood,
 		score = self.score
