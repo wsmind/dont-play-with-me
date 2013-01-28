@@ -19,14 +19,15 @@ function Heart.new(options)
 	local extent = vec2(8, 8)
 	self.aabb = aabb(self.pos - extent * Config.spriteScale, self.pos + extent * Config.spriteScale)
 	
-	self.image = love.graphics.newImage("assets/heart/Heart.png")
+	self.image = love.graphics.newImage("assets/heart/heart.png")
 	self.image:setFilter("nearest", "nearest")
 	
 	local grid = anim8.newGrid(32, 32, self.image:getWidth(), self.image:getHeight())
 	self.animations = {
 		idle = anim8.newAnimation("loop", grid(1, 2, 2, 2), 1, {0.6, 0.2}),
 		appear = anim8.newAnimation("once", grid(4, 3, 3, 3, 2, 3, 1, 3), 0.2),
-		disappear = anim8.newAnimation("once", grid(1, 1, 2, 1, 3, 1, 4, 1), 0.1)
+		--disappear = anim8.newAnimation("once", grid(1, 1, 2, 1, 3, 1, 4, 1), 0.1)
+		disappear = anim8.newAnimation("once", grid(1, 4, 2, 4), 0.1, {0.1, 0.3})
 	}
 	self:playAnimation("appear")
 	
