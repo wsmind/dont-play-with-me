@@ -17,6 +17,8 @@ function Mood.new(options)
 	-- excitement and influences
 	self.excitement = 0
 	self.blockInflunceOnExcitement = 0.1
+	self.excitementAverage = 0
+	self.excitementAverageSampleCount = 0
 	
 	-- mood colors
 	self.boredColor = vec4(21, 19, 101, 255)
@@ -49,6 +51,11 @@ end
 function Mood:influence(quantity)
 	-- update excitement
 	self.excitement = math.clamp(self.excitement + quantity * self.blockInflunceOnExcitement, 0, 1)
+	
+	-- update excitement average
+	local ean = self.excitementAverageSampleCount
+	self.excitementAverage = ((self.excitementAverage * ean) + self.excitement) / (ean + 1)
+	self.excitementAverageSampleCount = self.excitementAverageSampleCount + 1
 	
 	-- collects the samples
 	--self:collectHeartExcitementSamples()

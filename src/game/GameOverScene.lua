@@ -1,6 +1,7 @@
 
 require("game.Config")
 require("math.table")
+require("math.num")
 require("lib.simplestat")
 
 GameOverScene = {}
@@ -16,13 +17,14 @@ function GameOverScene.new(options)
 	self.currentPageScaleX = 1
 	self.currentPageScaleY = 1
 	
-	self.font = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 30)
+	self.fontBig = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 30)
+	self.fontSmall = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 20)
 	
-	self.outcomeTexts = {
-		{
-			text = ""
-		}
-			
+	self.outcomeText = ""
+	self.hintText = ""
+	
+	self.hintTexts = {
+		
 	}
 	
 	self.score = 0
@@ -37,8 +39,62 @@ function GameOverScene:initFromGameOutcome(options)
 	-- find out how well the player has matched the seduction pattern
 	local patternScore = self:getPatternFit(options.mood.pSampleAnalysisHistory)
 	
-	-- image
-	self.currentPageSource = love.graphics.newImage("assets/outro/Ending01-Best.png")
+	-- game outcome and image selection
+	local isBest = false
+	local isExcited = false
+	local isPositive = false
+	if patternScore >= 1 or options.score >= 25 then
+		isBest = true
+	else
+		if options.mood.excitementAverage >= 0.5 then
+			isExcited = true
+		end
+		
+		if patternScore >= 0.6 or options.score >= 10 then
+			isPositive = true
+		end
+	end
+	
+	print("final excitement avg: "..options.mood.excitementAverage)
+	
+	-- image selection
+	if isBest then
+	
+		-- best
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending01-Best.png")
+		self.outcomeText = "I'm the luckiest\ngame in the world!"
+		
+	elseif not isExcited and not isPositive then
+	
+		-- bored negative
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-negative.png")
+		self.outcomeText = "I'm not that kind\nof game. :("
+		
+	elseif isPositive and not isExcited then
+	
+		-- bored positive
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-positive.png")
+		self.outcomeText = "Well, we can still\nbe friends. :)"
+		
+	elseif isExcited and not isPositive then
+	
+		-- excited negative
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Excited-negative.png")
+		self.outcomeText = "You're too much to\ndeal with. :("
+		
+	elseif isExcited and isPositive then
+	
+		-- excited positive
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Excited-positive.png")
+		self.outcomeText = "You're a\nrollercoaster! :)"
+		
+	else
+		print("unknown game outcome!")
+		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-negative.png")
+		self.outcomeText = "You're special..."
+	end
+	
+	-- image setup
 	self.currentPageSource:setFilter("nearest","nearest")
 	self.currentPageWidth = self.currentPageSource:getWidth()
 	self.currentPageHeight = self.currentPageSource:getHeight()
@@ -47,6 +103,7 @@ function GameOverScene:initFromGameOutcome(options)
 	self.score = options.score
 end
 
+-- Gets how much the "seduction pattern" has been fit by the player
 function GameOverScene:getPatternFit(analysisHistory)
 	local n = #analysisHistory
 	if n == 0 then
@@ -62,9 +119,48 @@ function GameOverScene:getPatternFit(analysisHistory)
 	
 	local slopeAvg = stats.mean(analysisHistory)
 	
+	self.aHookMean = stats.mean(aHook)
+	self.aCalmMean = stats.mean(aCalm)
+	self.aClimaxMean = stats.mean(aClimax)
+	
 	local score = 0
+	
+	-- hook part: the average curve needs to be positive
+	if tonumber(self.aHookMean) then
+		if self.aHookMean > 0 then
+			score = score + self.aHookMean / 0.02
+		else
+			score = score - 2
+		end
+	end
+	
+	-- calm part : the average curve needs to be negative
+	if tonumber(self.aCalmMean) then
+		if self.aCalmMean < 0 then
+			score = score + self.aCalmMean / -0.01
+		else
+			score = score - 2
+		end
+	end
+	
+	-- climax part : the average curve needs to be positive and big
+	if tonumber(self.aClimaxMean) then
+		if self.aClimaxMean > 0 then
+			score = score + self.aClimaxMean / 0.03
+		else
+			score = score - 2
+		end
+	end
+	
+	-- bonus : calm < hook < climax
+	if self.aCalmMean < self.aHookMean and self.aHookMean < self.aClimaxMean then
+		score = score + 1
+	else
+		score = score - 3
+	end
 
-	return score
+	print("final pattern fit score: "..score)
+	return math.clamp(score / 10, 0, 1)
 end
 
 function GameOverScene:keyPressed(key, unicode)
@@ -86,12 +182,17 @@ function GameOverScene:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(self.currentPageSource, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, self.currentPageScaleX, self.currentPageScaleY, self.currentPageWidth / 2, self.currentPageHeight / 2)
 	
-	-- text
-	love.graphics.setFont(self.font)
-	love.graphics.print("Press any key to retry.", love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
+	-- big text
+	love.graphics.setFont(self.fontBig)
+	love.graphics.print("Press Enter to retry.", love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
+	--love.graphics.print(self.hint, love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
+	
 	love.graphics.setColor(Config.cBlank:asTable())
-	love.graphics.print("Game Over!", love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2)
 	love.graphics.print(self.score, love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 80)
+	
+	-- small text
+	love.graphics.setFont(self.fontSmall)
+	love.graphics.print(self.outcomeText, love.graphics.getWidth() / 2 - 60, love.graphics.getHeight() / 2)
 	
 	--love.graphics.setColor(Config.cLight:asTable())
 	--love.graphics.print("Press any key.", self.virtualScreenWidth / 2 - 100, self.virtualScreenHeight / 3)
