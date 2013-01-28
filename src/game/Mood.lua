@@ -21,8 +21,8 @@ function Mood.new(options)
 	self.excitementAverageSampleCount = 0
 	
 	-- mood colors
-	self.boredColor = vec4(21, 19, 101, 255)
-	self.excitedColor = vec4(255, 0, 0, 255)
+	self.boredColor = Config.boredColor
+	self.excitedColor = Config.excitedColor
 	
 	-- sample collection for the hearts (excitement)
 	self.hSampleCount = 16
