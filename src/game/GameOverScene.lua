@@ -209,7 +209,7 @@ function GameOverScene:draw()
 	--love.graphics.print(self.hint, love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
 	
 	love.graphics.setColor(Config.cBlank:asTable())
-	love.graphics.print(self.score, love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 80)
+	love.graphics.print(self.score, love.graphics.getWidth() / 2 - 55, love.graphics.getHeight() / 2 - 75)
 	
 	-- small text
 	love.graphics.setFont(self.fontSmall)
