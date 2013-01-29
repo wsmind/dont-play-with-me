@@ -45,6 +45,8 @@ Config = {
 	-- Base colors
 	boredColor = vec4(21, 19, 101, 255),
 	excitedColor = vec4(220, 16, 20, 255),
+	--boredColor = vec4(10, 10, 10, 255),
+	--excitedColor = vec4(240, 240, 240, 255),
 	cBlank = vec4(0,0,0,255),
 	cLight = vec4(250, 245, 250 ,255),
 	

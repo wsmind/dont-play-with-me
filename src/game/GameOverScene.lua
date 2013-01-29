@@ -23,6 +23,9 @@ function GameOverScene.new(options)
 	self.outcomeText = ""
 	self.hintText = ""
 	
+	self.patternUnlocked = false
+	self.patternScore = 0
+	
 	self.hintTexts = {
 		
 	}
@@ -43,7 +46,13 @@ function GameOverScene:initFromGameOutcome(options)
 	local isBest = false
 	local isExcited = false
 	local isPositive = false
-	if patternScore >= 1 or options.score >= 25 then
+	
+	self.patternScore = math.round(patternScore * 100, 1)
+	if patternScore >= 1 and not options.isPlayerFault then
+		self.patternUnlocked = true
+	end
+	
+	if self.patternUnlocked or options.score >= 25 then
 		isBest = true
 	else
 		if options.mood.excitementAverage >= 0.5 then
@@ -133,6 +142,7 @@ function GameOverScene:getPatternFit(analysisHistory)
 			score = score - 2
 		end
 	end
+	print("pattern fit score after hook: "..score)
 	
 	-- calm part : the average curve needs to be negative
 	if tonumber(self.aCalmMean) then
@@ -142,6 +152,7 @@ function GameOverScene:getPatternFit(analysisHistory)
 			score = score - 2
 		end
 	end
+	print("pattern fit score after calm: "..score)
 	
 	-- climax part : the average curve needs to be positive and big
 	if tonumber(self.aClimaxMean) then
@@ -151,16 +162,18 @@ function GameOverScene:getPatternFit(analysisHistory)
 			score = score - 2
 		end
 	end
+	print("pattern fit score after climax: "..score)
 	
 	-- bonus : calm < hook < climax
 	if self.aCalmMean < self.aHookMean and self.aHookMean < self.aClimaxMean then
 		score = score + 1
 	else
-		score = score - 3
+		--score = score - 3
 	end
+	print("pattern fit score after bonus: "..score)
 
 	print("final pattern fit score: "..score)
-	return math.clamp(score / 10, 0, 1)
+	return score / 10
 end
 
 function GameOverScene:keyPressed(key, unicode)
@@ -184,6 +197,9 @@ function GameOverScene:draw()
 	
 	-- big text
 	love.graphics.setFont(self.fontBig)
+	if self.patternUnlocked then
+		love.graphics.print("You have followed the secret seduction pattern! ("..self.patternScore.."%)", love.graphics.getWidth() / 2 - 275, love.graphics.getHeight() / 4 - 100)
+	end
 	love.graphics.print("Press Enter to retry.", love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
 	--love.graphics.print(self.hint, love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
 	
