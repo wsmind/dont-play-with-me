@@ -47,3 +47,31 @@ function table.slice (values,i1,i2)
 	
 	return res
 end
+
+function table.every(t, fn)
+    for i = 1, #t do
+        if not fn(t[i]) then
+            return false
+        end
+    end
+    return true
+end
+
+function table.max(t, fn)
+	if not fn then
+		fn = function(a,b) return a < b end
+	end
+	
+    if #t == 0 then return nil, nil end
+    local key, value = 1, t[1]
+    for i = 2, #t do
+        if fn(value, t[i]) then
+            key, value = i, t[i]
+        end
+    end
+    return {key, value}
+end
+
+function table.min(t)
+	return table.max(t, function (a,b) return a > b end)
+end

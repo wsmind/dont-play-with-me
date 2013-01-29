@@ -131,18 +131,25 @@ function GameOverScene:getPatternFit(analysisHistory)
 	
 	local slopeAvg = stats.mean(analysisHistory)
 	
-	self.aHookMean = stats.mean(aHook)
-	self.aCalmMean = stats.mean(aCalm)
-	self.aClimaxMean = stats.mean(aClimax)
+	--local aHookMean = stats.mean(aHook)
+	local aHookMax = table.max(aHook)[2]
+	--local aCalmMean = stats.mean(aCalm)
+	local aCalmMin = table.min(aCalm)[2]
+	--local aClimaxMean = stats.mean(aClimax)
+	local aClimaxMax = table.max(aClimax)[2]
 	
 	local score = 0
+	
+	local function allPos(t) return table.every(t, function(a) return a >= 0 end) end
+	local function allNeg(t) return table.every(t, function(a) return a <= 0 end) end
 	
 	print("pattern fit score initial: "..score.." (analysis starts for "..#analysisHistory.." samples, step "..step..")")
 	
 	-- hook part: the average curve needs to be positive
-	if tonumber(self.aHookMean) then
-		if self.aHookMean > 0 then
-			score = score + self.aHookMean / 0.02
+	if #aHook > 0 then
+		print("aHookMax "..aHookMax)
+		if aHookMax > 0 then
+			score = score + aHookMax / 0.02
 		else
 			score = score - 2
 		end
@@ -150,9 +157,10 @@ function GameOverScene:getPatternFit(analysisHistory)
 	end
 	
 	-- calm part : the average curve needs to be negative
-	if tonumber(self.aCalmMean) then
-		if self.aCalmMean < 0 then
-			score = score + self.aCalmMean / -0.01
+	if #aCalm > 0 then
+		print("aCalmMin "..aCalmMin)
+		if aCalmMin < 0 then
+			score = score + aCalmMin / -0.01
 		else
 			score = score - 2
 		end
@@ -160,9 +168,10 @@ function GameOverScene:getPatternFit(analysisHistory)
 	end
 	
 	-- climax part : the average curve needs to be positive and big
-	if tonumber(self.aClimaxMean) then
-		if self.aClimaxMean > 0 then
-			score = score + self.aClimaxMean / 0.03
+	if #aClimax > 0 then
+		print("aClimaxMax "..aClimaxMax)
+		if aClimaxMax > 0 then
+			score = score + aClimaxMax / 0.03
 		else
 			score = score - 2
 		end
@@ -170,12 +179,20 @@ function GameOverScene:getPatternFit(analysisHistory)
 	end
 	
 	-- bonus : calm < hook < climax
-	if self.aCalmMean < self.aHookMean and self.aHookMean < self.aClimaxMean then
+	if aCalmMin < aHookMax and aHookMax < aClimaxMax then
 		score = score + 1
 	else
 		--score = score - 3
 	end
-	print("pattern fit score after bonus: "..score)
+	print("pattern fit score after bonus pattern: "..score)
+	
+	-- bonus : all pos, all neg, all pos
+	if allPos(aHook) and allNeg(aCalm) and allPos(aClimax) then
+		score = score + 2
+	else
+		--score = score - 3
+	end
+	print("pattern fit score after bonus consistency: "..score)
 
 	print("final pattern fit score: "..score)
 	return score / 10

@@ -87,10 +87,11 @@ function Game:start()
 	end]]--
 	
 	-- text assets
+	-- mins are inclusive, maxs are exclusive
 	self.feedbackTexts = {
 		{
 			slopeMin = 0,
-			slopeMax = 0.008,
+			slopeMax = 0.04,
 			texts = {
 				"Apart from being cool, what do you do?",
 				"Wanna go watch a movie later?",
@@ -103,13 +104,13 @@ function Game:start()
 			}
 		},
 		{
-			slopeMin = 0.008,
+			slopeMin = 0.04,
 			slopeMax = 2,
 			texts = {
 				"Apart from being handsome, what do you do?",
 				"Let's go to my place...",
 				"I love spending time with you.",
-				"Is it hot in here or is it just you?",
+				"God, I'm so hooked.",
 				"You're so awesome!",
 				"You're so cute!",
 				"Here's my number! So call me, maybe...",
@@ -118,53 +119,37 @@ function Game:start()
 			}
 		},
 		{
-			slopeMin = -0.003,
+			slopeMin = -0.03,
 			slopeMax = 0,
 			texts = {
 				"A date? Um... I'm not sure...",
-				--"Could you just... stop acting like that?!",
-				--"Woah, don't behave like an idiot.",
-				--"Come on, really?",
 				"I don't believe this.",
 				"You're kidding me, aren't you?",
 				"You're such a kid.",
 				"You're weird.",
-				--"Haha, funny. Now do it right.",
-				--"Wait... seriously...?",
-				--"Ok, um, yeah... well...No... no, i don't like it.",
 				"That was awkward.",
-				--"I do not like it. I do not like it at all.",
 				"I feel like being alone.",
 				"I'll go home, now, okay?",
 				"I can't see you, I'm pretty busy right now.",
 				"We could go for a coffee next month, maybe.",
 				"Who are you again?"
-				--"Wake me up when something exciting happens."
 			}
 		},
 		{
 			slopeMin = -2,
-			slopeMax = -0.003,
+			slopeMax = -0.03,
 			texts = {
 				"A date? Please kill me.",
-				--"Could you just... stop acting like that?!",
-				--"Woah, don't behave like an idiot.",
-				--"Come on, really?",
 				"Are you for real?!",
 				"You gotta be kidding me.",
 				"You're such a jerk.",
 				"You're so weird.",
-				--"Haha, funny. Now do it right.",
-				--"Wait... seriously...?",
-				--"Ok, um, yeah... well...No... no, i don't like it.",
 				"That was so awkward.",
-				--"I do not like it. I do not like it at all.",
 				"No, really, I'm having more fun with myself.",
 				"I want to go home now.",
 				"We can't meet. No way.",
 				"A coffee next month? Rather next year...",
-				"Thanks for nothing"
-				--"Wake me up when something exciting happens."
+				"Thanks for nothing..."
 			}
 		}
 	}
@@ -397,12 +382,12 @@ function Game:draw()
 	love.graphics.print(math.floor(self.timeout), 50, 50)
 	
 	-- Debug
-	--[[love.graphics.print("YOU LOST", 50, 50)
-	love.graphics.print(self.mood.hSampleAverage, 100, 100)
-	love.graphics.print(self.mood.hSampleSD, 100, 150)
+	--love.graphics.print("YOU LOST", 50, 50)
+	--love.graphics.print(self.mood.hSampleAverage, 100, 100)
+	--love.graphics.print(self.mood.hSampleSD, 100, 150)
 	love.graphics.print(self.mood:getLastPatternSlope(), 100, 200)
-	love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
-	love.graphics.print(self.mood:getHeartWorth(), 100, 300)]]--
+	--love.graphics.print(self.mood.iExcitementInfluenceRatio, 100, 250)
+	--love.graphics.print(self.mood:getHeartWorth(), 100, 300)
 	--love.graphics.print(self.mood.excitementAverage, 100, 300)
 end
 
@@ -418,9 +403,9 @@ function Game:spawnTextBlock(slope, targetBlock)
 	-- gets the text value depending on the slope
 	local textv = ""
 	for k,v in pairs(self.feedbackTexts) do
-		if slope > v.slopeMin and slope < v.slopeMax then
+		if slope >= v.slopeMin and slope < v.slopeMax then
 			textv = v.texts[math.floor(math.random(1, #v.texts))]
-			print(textv)
+			print("slope "..slope.." gave "..textv)
 		end
 	end
 	
