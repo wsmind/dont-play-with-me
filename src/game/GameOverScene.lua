@@ -120,9 +120,12 @@ function GameOverScene:getPatternFit(analysisHistory)
 	end
 	
 	local step = math.floor(n / 3)
+	if step < 1 then
+		return 0
+	end
 	
 	-- defines the different parts of the analysis
-	local aHook = table.slice(analysisHistory, 0, step)
+	local aHook = table.slice(analysisHistory, 1, step)
 	local aCalm = table.slice(analysisHistory, step + 1, 2 * step)
 	local aClimax = table.slice(analysisHistory, 2 * step + 1, n)
 	
@@ -134,6 +137,8 @@ function GameOverScene:getPatternFit(analysisHistory)
 	
 	local score = 0
 	
+	print("pattern fit score initial: "..score.." (analysis starts for "..#analysisHistory.." samples, step "..step..")")
+	
 	-- hook part: the average curve needs to be positive
 	if tonumber(self.aHookMean) then
 		if self.aHookMean > 0 then
@@ -141,8 +146,8 @@ function GameOverScene:getPatternFit(analysisHistory)
 		else
 			score = score - 2
 		end
+		print("pattern fit score after hook: "..score.." (over "..#aHook.." samples)")
 	end
-	print("pattern fit score after hook: "..score)
 	
 	-- calm part : the average curve needs to be negative
 	if tonumber(self.aCalmMean) then
@@ -151,8 +156,8 @@ function GameOverScene:getPatternFit(analysisHistory)
 		else
 			score = score - 2
 		end
+		print("pattern fit score after calm: "..score.." (over "..#aCalm.." samples)")
 	end
-	print("pattern fit score after calm: "..score)
 	
 	-- climax part : the average curve needs to be positive and big
 	if tonumber(self.aClimaxMean) then
@@ -161,8 +166,8 @@ function GameOverScene:getPatternFit(analysisHistory)
 		else
 			score = score - 2
 		end
+		print("pattern fit score after climax: "..score.." (over "..#aClimax.." samples)")
 	end
-	print("pattern fit score after climax: "..score)
 	
 	-- bonus : calm < hook < climax
 	if self.aCalmMean < self.aHookMean and self.aHookMean < self.aClimaxMean then
