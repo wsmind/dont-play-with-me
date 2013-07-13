@@ -104,6 +104,10 @@ function Game:start()
 				"You're so charming!",
 				"Here's my number! So call me, maybe...",
 				"That was a nice date!"
+			},
+			suffixes =  {
+				" :)",
+				" ;)"
 			}
 		},
 		{
@@ -119,6 +123,10 @@ function Game:start()
 				"Here's my number! So call me, maybe...",
 				"That was so... oh-my-god.",
 				"It's good being close to you."
+			},
+			suffixes =  {
+				" :D",
+				" ;D"
 			}
 		},
 		{
@@ -136,6 +144,10 @@ function Game:start()
 				"I can't see you, I'm pretty busy right now.",
 				"We could go for a coffee next month, maybe.",
 				"Who are you again?"
+			}, 
+			suffixes =  {
+				" :\\",
+				" :|"
 			}
 		},
 		{
@@ -146,13 +158,18 @@ function Game:start()
 				"Are you for real?!",
 				"You gotta be kidding me.",
 				"You're such a jerk.",
-				"You're so weird.",
-				"That was so awkward.",
+				"You're insane.",
+				"That was humiliating.",
 				"No, really, I'm having more fun with myself.",
 				"I want to go home now.",
 				"We can't meet. No way.",
 				"A coffee next month? Rather next year...",
 				"Thanks for nothing..."
+			}, 
+			suffixes =  {
+				" ;(",
+				" :{",
+				" :("
 			}
 		}
 	}
@@ -393,7 +410,7 @@ function Game:spawnTextBlock(slope, targetBlock)
 	local textv = ""
 	for k,v in pairs(self.feedbackTexts) do
 		if slope >= v.slopeMin and slope < v.slopeMax then
-			textv = v.texts[math.floor(math.random(1, #v.texts))]
+			textv = v.texts[math.floor(math.random(1, #v.texts))] .. v.suffixes[math.floor(math.random(1, #v.suffixes))]
 			print("slope "..slope.." gave "..textv)
 		end
 	end
