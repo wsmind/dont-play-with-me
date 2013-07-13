@@ -4,7 +4,17 @@ require("math.table")
 require("math.num")
 require("lib.simplestat")
 
-GameOverScene = {}
+GameOverScene = {
+	endingImages = {
+		best = love.graphics.newImage("assets/outro/Ending01-Best.png"),
+		boredNegative = love.graphics.newImage("assets/outro/Ending02-Bored-negative.png"),
+		boredPositive = love.graphics.newImage("assets/outro/Ending02-Bored-positive.png"),
+		excitedNegative = love.graphics.newImage("assets/outro/Ending02-Excited-negative.png"),
+		excitedPositive = love.graphics.newImage("assets/outro/Ending02-Excited-positive.png")
+	},
+	fontBig = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 30),
+	fontSmall = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 20)
+}
 GameOverScene.__index = GameOverScene
 
 function GameOverScene.new(options)
@@ -16,9 +26,6 @@ function GameOverScene.new(options)
 	self.currentPageHeight = 0
 	self.currentPageScaleX = 1
 	self.currentPageScaleY = 1
-	
-	self.fontBig = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 30)
-	self.fontSmall = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 20)
 	
 	self.outcomeText = ""
 	self.hintText = ""
@@ -32,8 +39,7 @@ function GameOverScene.new(options)
 	
 	self.score = 0
 	
-	-- analyses the game outcome and displays stuff
-	self:initFromGameOutcome(options)
+	self.active = false
 		
     return self
 end
@@ -70,36 +76,36 @@ function GameOverScene:initFromGameOutcome(options)
 	if isBest then
 	
 		-- best
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending01-Best.png")
+		self.currentPageSource = self.endingImages.best
 		self.outcomeText = "I'm the luckiest\ngame in the world!"
 		
 	elseif not isExcited and not isPositive then
 	
 		-- bored negative
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-negative.png")
+		self.currentPageSource = self.endingImages.boredNegative
 		self.outcomeText = "I'm not that kind\nof game. :("
 		
 	elseif isPositive and not isExcited then
 	
 		-- bored positive
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-positive.png")
+		self.currentPageSource = self.endingImages.boredPositive
 		self.outcomeText = "Well, we can still\nbe friends. :)"
 		
 	elseif isExcited and not isPositive then
 	
 		-- excited negative
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Excited-negative.png")
+		self.currentPageSource = self.endingImages.excitedNegative
 		self.outcomeText = "You're too much to\ndeal with. :("
 		
 	elseif isExcited and isPositive then
 	
 		-- excited positive
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Excited-positive.png")
+		self.currentPageSource = self.endingImages.excitedPositive
 		self.outcomeText = "You're a\nrollercoaster! :)"
 		
 	else
 		print("unknown game outcome!")
-		self.currentPageSource = love.graphics.newImage("assets/outro/Ending02-Bored-negative.png")
+		self.currentPageSource = self.endingImages.boredNegative
 		self.outcomeText = "You're special..."
 	end
 	
@@ -110,6 +116,9 @@ function GameOverScene:initFromGameOutcome(options)
 	
 	-- score
 	self.score = options.score
+	
+	-- is active
+	self.active = true
 end
 
 -- Gets how much the "seduction pattern" has been fit by the player
@@ -199,7 +208,10 @@ function GameOverScene:getPatternFit(analysisHistory)
 end
 
 function GameOverScene:keyPressed(key, unicode)
-	
+	if key == "return" then
+		-- deactivate the scene if enter is pressed
+		self.active = false
+	end
 end
 
 function GameOverScene:keyReleased(key, unicode)

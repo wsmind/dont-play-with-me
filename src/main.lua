@@ -1,27 +1,21 @@
---[[ 
-The NoName Fiber Game
-Copyright (c) 2012 Aurélien Defossez, Jean-Marie Comets, Anis Benyoub, Rémi Papillié
-]]
 
 require("game.Game")
 require("game.IntroScene")
 
 function love.load()
 	intro = IntroScene.new{}
-	game = Game.new{}
+	outro = GameOverScene.new{}
+	game = Game.new{
+		gameOverScene = outro
+	}
+	
 	game:start()
 end
 
 function love.mousepressed(x, y, button)
-	if intro.active and game then
-		game:mousePressed(x, y, button)
-	end
 end
 
 function love.mousereleased(x, y, button)
-	if intro.active and game then
-		game:mouseReleased(x, y, button)
-	end
 end
 
 function love.keypressed(key, unicode)
@@ -29,6 +23,8 @@ function love.keypressed(key, unicode)
 		love.event.push("quit")
     elseif intro.active then
 		intro:keyPressed(key, unicode)
+	elseif game.isGameOver then
+		outro:keyPressed(key, unicode)
 	else
 		game:keyPressed(key, unicode)
 	end
@@ -37,6 +33,8 @@ end
 function love.keyreleased(key, unicode)
 	if intro.active then
 		intro:keyReleased(key, unicode)
+	elseif game.isGameOver then
+		outro:keyReleased(key, unicode)
 	else
 		game:keyReleased(key, unicode)
 	end
@@ -57,8 +55,19 @@ function love.update(dt)
 			game:update(dt)
 		end
 		
-		return
+	elseif game.isGameOver then
+		-- updates outro
+		outro:update(dt)
 		
+		-- if the outro is over, restart the intro
+		if outro.active == false then
+			-- reset game
+			game:start()
+			
+			-- restart intro
+			intro:restart()
+			intro:update(dt)
+		end
 	else
 		game:update(dt)
 	end
@@ -67,7 +76,8 @@ end
 function love.draw()
 	if intro.active then
 		intro:draw()
-		return
+	elseif game.isGameOver then
+		outro:draw()
 	else
 		game:draw()
 	end

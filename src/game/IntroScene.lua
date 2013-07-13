@@ -42,8 +42,13 @@ function IntroScene.new(options)
     return self
 end
 
-function IntroScene:getIsOver()
-	return not self.active
+function IntroScene:restart()
+	love.graphics.setColor({255, 255, 255, 255})
+	
+	self.currentPage = 1
+	self:updateCurrentPage()
+	
+	self.active = true
 end
 
 function IntroScene:keyPressed(key, unicode)
@@ -71,7 +76,6 @@ function IntroScene:keyReleased(key, unicode)
 end
 
 function IntroScene:update(dt)
-	
 end
 
 function IntroScene:draw()

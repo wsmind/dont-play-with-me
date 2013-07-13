@@ -36,6 +36,9 @@ function Game.new(options)
 	
 	self.soundtrack:startAllMute()
 	
+	-- game over scene to update in case of gameover
+	self.gameOverScene = options.gameOverScene
+	
     return self
 end
 
@@ -154,9 +157,8 @@ function Game:start()
 		}
 	}
 	
-	-- game over
+	-- game over is over
 	self.isGameOver = false
-	self.gameOverScene = nil
 	
 	self.score = 0
 	
@@ -170,10 +172,7 @@ function Game:mouseReleased(x, y, button)
 end
 
 function Game:keyPressed(key, unicode)
-	if self.isGameOver and key == "return" then
-		self:start()
-	end
-	
+
 	-- hero movement
 	if key == "left" then
 		self.heroMovesLeft = true
@@ -203,11 +202,6 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
-
-	if self.isGameOver then
-		self.gameOverScene:update(dt)
-		return
-	end
 	
 	-- mood
 	self.mood:update(dt)
@@ -329,11 +323,6 @@ function Game:draw()
 
 	love.graphics.setFont(self.font)
 
-	if self.isGameOver then
-		self.gameOverScene:draw()
-		return
-	end
-
     -- draw background
 	self.background:draw()
 	
@@ -429,11 +418,11 @@ function Game:_screenToWorld(vector)
 end
 
 function Game:gameOver(playerFault)
-	self.gameOverScene = GameOverScene.new{
+	self.gameOverScene:initFromGameOutcome({
 		mood = self.mood,
 		score = self.score,
 		isPlayerFault = playerFault
-	}
+	})
 	
-	self.isGameOver = 1
+	self.isGameOver = true
 end
