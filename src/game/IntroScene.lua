@@ -8,7 +8,6 @@ function IntroScene.new(options)
     local self = {}
     setmetatable(self, IntroScene)
 	
-		
 	-- the game has a virtual height
 	self.virtualScreenHeight = Config.virtualScreenHeight
     self.virtualScaleFactor = love.graphics.getHeight() / self.virtualScreenHeight
@@ -76,6 +75,7 @@ function IntroScene:keyReleased(key, unicode)
 end
 
 function IntroScene:update(dt)
+
 end
 
 function IntroScene:draw()

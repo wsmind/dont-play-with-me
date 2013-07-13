@@ -1,15 +1,11 @@
 
 require("game.Game")
 require("game.IntroScene")
+require("game.GameOverScene")
+require("game.LoaderSplashScene")
 
 function love.load()
-	intro = IntroScene.new{}
-	outro = GameOverScene.new{}
-	game = Game.new{
-		gameOverScene = outro
-	}
-	
-	game:start()
+	loader = LoaderSplashScene.new{}
 end
 
 function love.mousepressed(x, y, button)
@@ -21,6 +17,8 @@ end
 function love.keypressed(key, unicode)
 	if key == "escape" then
 		love.event.push("quit")
+	elseif loader.complete == false then
+		loader:keyPressed(key, unicode)
     elseif intro.active then
 		intro:keyPressed(key, unicode)
 	elseif game.isGameOver then
@@ -31,7 +29,9 @@ function love.keypressed(key, unicode)
 end
 
 function love.keyreleased(key, unicode)
-	if intro.active then
+	if loader.complete == false then
+		loader:keyReleased(key, unicode)
+	elseif intro.active then
 		intro:keyReleased(key, unicode)
 	elseif game.isGameOver then
 		outro:keyReleased(key, unicode)
@@ -45,7 +45,25 @@ function love.update(dt)
 		dt = 0.1
 	end
 	
-	if intro.active then
+	if loader.completed == false then
+		-- update loader
+		loader:update(dt)
+
+		-- if the loader is complete, start the intro
+		if loader.completed == true then
+			-- gets the scenes from the loader
+			intro = loader.loadedResources.intro
+			game = loader.loadedResources.game
+			outro = loader.loadedResources.outro
+			
+			-- starts the game
+			game:start()
+			
+			-- updates the intro
+			intro:update(dt)
+		end
+	elseif intro.active then
+		
 		-- update intro
 		intro:update(dt)
 		
@@ -74,7 +92,9 @@ function love.update(dt)
 end
 
 function love.draw()
-	if intro.active then
+	if loader.completed == false then
+		loader:draw()
+	elseif intro.active then
 		intro:draw()
 	elseif game.isGameOver then
 		outro:draw()
