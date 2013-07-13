@@ -34,6 +34,8 @@ function Mood.new(options)
 	self.iSampleCount = 8
 	self.iSamples = {}
 	self.iExcitementInfluenceRatio = 0 -- proportion of excitement
+	self.iCurrentBoredomCount = 0
+	self.iCurrentExcitementCount = 0
 	
 	-- sample collection for the pattern
 	self.pSampleCount = 8
@@ -87,7 +89,7 @@ function Mood:update(dt)
 	
 end
 
-function Mood:collectHeartExcitementSamples()
+--[[function Mood:collectHeartExcitementSamples()
 	-- pops the first value of the table if the sample count has been reached
 	if #self.hSamples == self.hSampleCount then
 		table.remove(self.hSamples, 0)
@@ -99,27 +101,41 @@ function Mood:collectHeartExcitementSamples()
 	-- updates the statistical values
 	self.hSampleAverage = stats.mean(self.hSamples)
 	self.hSampleSD = stats.standardDeviation(self.hSamples)
-end
+end]]--
 
 function Mood:collectHeartInfluenceSamples(lastInfluence)
+	local boredomCount = self.iCurrentBoredomCount
+	local excitementCount = self.iCurrentExcitementCount
+	
 	-- pops the first value of the table if the sample count has been reached
 	if #self.iSamples == self.iSampleCount then
-		table.remove(self.iSamples, 0)
+		-- gets the value to pop.
+		local popedV = self.iSamples[1]
+		
+		-- removes the value
+		table.remove(self.iSamples, 1)
+		
+		-- updates the count
+		if popedV < 0 then
+			boredomCount = boredomCount - 1
+		else
+			excitementCount = excitementCount - 1
+		end
 	end
 	
 	-- queues the current value
 	table.insert(self.iSamples, lastInfluence)
 	
-	-- updates the statistical values
-	local boredomCount = 0
-	local excitementCount = 0
-	for k,v in pairs(self.iSamples) do
-        if v < 0 then
-			boredomCount = boredomCount + 1
-		else
-			excitementCount = excitementCount + 1
-		end
-    end
+	-- updates the counts
+	if lastInfluence < 0 then
+		boredomCount = boredomCount + 1
+	else
+		excitementCount = excitementCount + 1
+	end
+	self.iCurrentBoredomCount = boredomCount
+	self.iCurrentExcitementCount = excitementCount
+	
+	-- updates the ratio
 	if boredomCount == 0 and excitementCount == 0 then
 		self.iExcitementInfluenceRatio = 0
 	else
@@ -131,7 +147,7 @@ function Mood:collectPatternSamples()
 	-- collects the data
 	table.insert(self.pSamples, self.excitement)
 	
-	-- analyses the current window if it's maximum has been reached
+	-- analyses the current window if its maximum has been reached
 	if #self.pSamples >= self.pSampleCount then
 		-- gets the slope of the sample collection
 		local slope = self:getPatternSamplesSlope(self.pSamples)
@@ -164,7 +180,7 @@ function Mood:getPatternSamplesSlope(samples)
 	local sxy = 0
 	local syy = 0
 	local n = #samples
-	for k,v in pairs(samples) do
+	for k,v in ipairs(samples) do
         sx = sx + k
 		sy = sy + v
 		sxy = sxy + (k * v)

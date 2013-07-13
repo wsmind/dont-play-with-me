@@ -30,64 +30,7 @@ function Game.new(options)
 	
 	Block.loadResources()
 	
-	-- music
-	self.soundtrack = Soundtrack.new{}
-	--self.soundtrack:prepareCrossfade("piano", "strings")
-	
-	self.soundtrack:startAllMute()
-	
-	-- game over scene to update in case of gameover
-	self.gameOverScene = options.gameOverScene
-	
-    return self
-end
-
-function Game:start()
-	-- camera
-    self.camera = vec2(0, 0)
-	self.zoom = 1.0
-	
-	-- mood
-	self.mood = Mood.new{
-		
-	}
-	
-	-- hero stuff
-	self.hero = Hero.new{}
-	self.heroMovesLeft = false
-	self.heroMovesRight = false
-	
-	-- blocks
-	self.blocks = {}
-	local currentX = -2000
-	for i = 0, 1000 do
-		local options = {
-			x = currentX,
-			width = Config.blockWidth + Config.blockWidthVariation * (math.random() - 0.5),
-			height = Config.blockHeight + Config.blockHeightVariation * (math.random() - 0.5),
-			excitement = math.floor(math.random() * 2) * 2 - 1
-		}
-		local block = Block.new(options)
-		currentX = currentX + options.width + Config.blockSpacing
-		table.insert(self.blocks, block)
-	end
-	
-	-- text blocks
-	self.textBlocks = {}
-	
-	-- background
-	self.background = Background.new{
-		mood = self.mood
-	}
-	
-	-- hearts
-	self.hearts = {}
-	--[[for i = 0, 500 do
-		local heart = Heart.new{
-			pos = vec2(math.random() * 2000, math.random() * 1000 - 500)
-		}
-		table.insert(self.hearts, heart)
-	end]]--
+	-- common texts
 	
 	-- text assets
 	-- mins are inclusive, maxs are exclusive
@@ -173,6 +116,65 @@ function Game:start()
 			}
 		}
 	}
+	
+	-- music
+	self.soundtrack = Soundtrack.new{}
+	--self.soundtrack:prepareCrossfade("piano", "strings")
+	
+	self.soundtrack:startAllMute()
+	
+	-- game over scene to update in case of gameover
+	self.gameOverScene = options.gameOverScene
+	
+    return self
+end
+
+function Game:start()
+	-- camera
+    self.camera = vec2(0, 0)
+	self.zoom = 1.0
+	
+	-- mood
+	self.mood = Mood.new{
+		
+	}
+	
+	-- hero stuff
+	self.hero = Hero.new{}
+	self.heroMovesLeft = false
+	self.heroMovesRight = false
+	
+	-- blocks
+	self.blocks = {}
+	local currentX = -2000
+	for i = 0, 1000 do
+		local options = {
+			x = currentX,
+			width = Config.blockWidth + Config.blockWidthVariation * (math.random() - 0.5),
+			height = Config.blockHeight + Config.blockHeightVariation * (math.random() - 0.5),
+			excitement = math.floor(math.random() * 2) * 2 - 1
+		}
+		local block = Block.new(options)
+		currentX = currentX + options.width + Config.blockSpacing
+		table.insert(self.blocks, block)
+	end
+	
+	-- text blocks
+	self.textBlocks = {}
+	
+	-- background
+	self.background = Background.new{
+		mood = self.mood
+	}
+	
+	-- hearts
+	self.hearts = {}
+	--[[for i = 0, 500 do
+		local heart = Heart.new{
+			pos = vec2(math.random() * 2000, math.random() * 1000 - 500)
+		}
+		table.insert(self.hearts, heart)
+	end]]--
 	
 	-- game over is over
 	self.isGameOver = false
