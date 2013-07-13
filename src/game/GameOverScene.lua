@@ -13,7 +13,7 @@ GameOverScene = {
 		excitedPositive = love.graphics.newImage("assets/outro/Ending02-Excited-positive.png")
 	},
 	fontBig = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 30),
-	fontSmall = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 20)
+	fontHuge = love.graphics.newFont("assets/fonts/Dimbo Regular.ttf", 50)
 }
 GameOverScene.__index = GameOverScene
 
@@ -249,18 +249,16 @@ function GameOverScene:draw()
 	-- big text
 	love.graphics.setFont(self.fontBig)
 	if self.patternUnlocked then
-		love.graphics.print("You have followed the secret seduction pattern! ("..self.patternScore.."%)", love.graphics.getWidth() / 2 - 275, love.graphics.getHeight() / 4 - 100)
+		love.graphics.print("You have followed the secret seduction pattern! ("..self.patternScore.."%)", love.graphics.getWidth() / 2 - 275, 25)
 	end
-	love.graphics.print("Press Enter to retry.", love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
+	love.graphics.print("Press Enter to retry.", love.graphics.getWidth() / 2 - 110, love.graphics.getHeight() - 100)
 	--love.graphics.print(self.hint, love.graphics.getWidth() / 2 - 100, 3 * love.graphics.getHeight() / 4)
 	
 	love.graphics.setColor(Config.cBlank:asTable())
-	love.graphics.print(self.score, love.graphics.getWidth() / 2 - 55, love.graphics.getHeight() / 2 - 75)
 	
-	-- small text
-	love.graphics.setFont(self.fontSmall)
-	love.graphics.print(self.outcomeText, love.graphics.getWidth() / 2 - 60, love.graphics.getHeight() / 2)
+	love.graphics.print(self.outcomeText, love.graphics.getWidth() / 2 - 100, love.graphics.getHeight() / 2 - 10)
 	
-	--love.graphics.setColor(Config.cLight:asTable())
-	--love.graphics.print("Press any key.", self.virtualScreenWidth / 2 - 100, self.virtualScreenHeight / 3)
+	-- huge text
+	love.graphics.setFont(self.fontHuge)
+	love.graphics.print(self.score, love.graphics.getWidth() / 2 - 110, love.graphics.getHeight() / 2 - 140)
 end
