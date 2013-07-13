@@ -1,4 +1,4 @@
-RELEASE NOTES FOR "don't play with me!"
+﻿RELEASE NOTES FOR "don't play with me!"
 =======================================
 
 Thanks for playing "The Game!" ;)
@@ -9,15 +9,14 @@ https://love2d.org/
 There are two versions released here.
 Pick yours depending on your platform.
 
-- the x86 version uses Löve 0.8.0 and may take up to a minute to load 
-  (the screen may freeze during this time)
+- the x86 version uses Löve 0.8.1 (experimental build, 2012-08-28.)
   
-- the x64 version uses Löve 0.8.1 (experimental build) and loads up
-  very fast.
+- the x64 version uses Löve 0.8.1 (experimental build, 2012-08-28.)
   
 
-If you play this game sometime in the future when Löve2D has shipped
-a newer version, this still should work.
+Tests on early (unreleased) builds of Löve 0.9.0 indicate that the game may not run on
+future versions of Löve. Therefore, please rely on the provided executables to run the game.
+
 Feel free to follow installation instructions on https://love2d.org/
 
 
