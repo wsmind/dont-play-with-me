@@ -39,6 +39,9 @@ function GameOverScene.new(options)
 	
 	self.score = 0
 	
+	-- inactivity timer
+	self.elapsedInactivityTime = 0
+	
 	self.active = false
 		
     return self
@@ -208,6 +211,9 @@ function GameOverScene:getPatternFit(analysisHistory)
 end
 
 function GameOverScene:keyPressed(key, unicode)
+	-- reset inactivity
+	self.elapsedInactivityTime = 0
+	
 	if key == "return" then
 		-- deactivate the scene if enter is pressed
 		self.active = false
@@ -215,11 +221,22 @@ function GameOverScene:keyPressed(key, unicode)
 end
 
 function GameOverScene:keyReleased(key, unicode)
-	
+	-- reset inactivity
+	self.elapsedInactivityTime = 0
 end
 
 function GameOverScene:update(dt)
+	-- update inactivity timer
+	self.elapsedInactivityTime = self.elapsedInactivityTime + dt
 	
+	-- check inactivity
+	if Config.inacTimerOn and self.elapsedInactivityTime > Config.inacTimerStart then
+		-- reset to intro
+		self.active = false
+		
+		-- reset inactivity
+		self.elapsedInactivityTime = 0
+	end
 end
 
 function GameOverScene:draw()

@@ -34,6 +34,9 @@ function IntroScene.new(options)
 	self.currentPageScaleX = 0
 	self.currentPageScaleY = 0
 	self:updateCurrentPage()
+	
+	-- inactivity timer
+	self.elapsedInactivityTime = 0
 
 	self.active = true
 
@@ -53,6 +56,9 @@ end
 function IntroScene:keyPressed(key, unicode)
 	self.currentPage = self.currentPage + 1
 	self:updateCurrentPage()
+	
+	-- inactivity reset
+	self.elapsedInactivityTime = 0
 end
 
 function IntroScene:updateCurrentPage()
@@ -71,11 +77,23 @@ function IntroScene:updateCurrentPage()
 end
 
 function IntroScene:keyReleased(key, unicode)
-	
+	-- inactivity reset
+	self.elapsedInactivityTime = 0
 end
 
 function IntroScene:update(dt)
-
+	-- update inactivity timer
+	self.elapsedInactivityTime = self.elapsedInactivityTime + dt
+	
+	-- check inactivity
+	if Config.inacTimerOn and self.elapsedInactivityTime > Config.inacTimerStart then
+		-- reset to first page
+		self.currentPage = 1
+		self:updateCurrentPage()
+		
+		-- reset inactivity
+		self.elapsedInactivityTime = 0
+	end
 end
 
 function IntroScene:draw()

@@ -59,4 +59,7 @@ Config = {
 	-- Sound
 	soundFadeDuration = 8,
 
+	-- Inactivity timer
+	inacTimerOn = false,
+	inacTimerStart = 30 -- How long the game needs to be inactive before it is reset, in seconds
 }
