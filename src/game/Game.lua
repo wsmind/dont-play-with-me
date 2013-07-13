@@ -221,7 +221,6 @@ function Game:keyReleased(key, unicode)
 end
 
 function Game:update(dt)
-	
 	-- mood
 	self.mood:update(dt)
 	
@@ -273,6 +272,9 @@ function Game:update(dt)
 							}
 							table.insert(self.hearts, heart)
 						end
+						
+						-- no more blocks could possibly be excited right now
+						break
 					end
 				end
 			end
@@ -336,6 +338,7 @@ function Game:update(dt)
 	-- update sound crossfade
 	--self.soundtrack:updateCrossfade(self.mood.excitement)
 	self.soundtrack:update(dt, self.mood.excitement)
+
 end
 
 function Game:draw()
@@ -410,7 +413,7 @@ function Game:spawnTextBlock(slope, targetBlock)
 	
 	-- gets the text value depending on the slope
 	local textv = ""
-	for k,v in pairs(self.feedbackTexts) do
+	for k,v in ipairs(self.feedbackTexts) do
 		if slope >= v.slopeMin and slope < v.slopeMax then
 			textv = v.texts[math.floor(math.random(1, #v.texts))] .. v.suffixes[math.floor(math.random(1, #v.suffixes))]
 			print("slope "..slope.." gave "..textv)

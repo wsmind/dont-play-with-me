@@ -66,7 +66,6 @@ function Mood:influence(quantity)
 	if not (slope == nil) then
 		self.pLastSampleAnalysis = slope
 	end
-	
 	-- returns an event?
 	return slope
 end
