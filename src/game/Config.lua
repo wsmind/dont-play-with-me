@@ -17,7 +17,7 @@ Config = {
 	levelDuration = 60,
 	
 	-- Text blocks
-	textBlockDurationOnScreen = 5, -- in seconds
+	textBlockDurationOnScreen = 7, -- in seconds
 	textBlockSpawnDuration = 0.5, -- in seconds
 	
 	-- Player avatar configuration
