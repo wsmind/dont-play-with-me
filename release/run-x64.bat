@@ -1,1 +1,1 @@
-love-0.8.1-win-x64\love.exe ..\src
+love-0.8.1-win-x64-20120828\love.exe ..\src

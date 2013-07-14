@@ -9,7 +9,8 @@ https://love2d.org/
 There are two versions released here.
 Pick yours depending on your platform.
 
-- the x86 version uses Löve 0.8.1 (experimental build, 2012-08-28.)
+- the x86 version uses Löve 0.8.1 (experimental build, 2013-01-12.)
+This build fixes some lag problems on older platforms.
   
 - the x64 version uses Löve 0.8.1 (experimental build, 2012-08-28.)
   
