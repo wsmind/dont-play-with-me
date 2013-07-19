@@ -19,6 +19,7 @@ Config = {
 	-- Text blocks
 	textBlockDurationOnScreen = 7, -- in seconds
 	textBlockSpawnDuration = 0.5, -- in seconds
+	textBlockScrollSpeedAdjustmentMax = 7, -- in pixel/s, maximum adjustment speed to give to text blocks when the camera is at its maximum speed
 	
 	-- Player avatar configuration
 	heroHorizontalSpeed = vec2(400,0), -- How much the hero moves when it's walking to the right (px/s)

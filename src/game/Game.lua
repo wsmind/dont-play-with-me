@@ -281,14 +281,6 @@ function Game:update(dt)
 		end
 	end
 	
-	-- text blocks
-	for key, tblock in ipairs(self.textBlocks) do
-		tblock:update(dt)
-		if tblock:getNeedsDispose() then
-			table.remove(self.textBlocks, key)
-		end
-	end
-	
 	-- jumping
 	if love.keyboard.isDown("up") then
 		self.hero:jump()
@@ -330,10 +322,20 @@ function Game:update(dt)
 	Config.floatingSpeed = vec2(300 * (1 + self.mood.excitement), 100)
 	
 	-- scroll screen, function of the mood
-	self.camera.x = self.camera.x + math.linearInterpolate(Config.cameraScrollSpeedMin, Config.cameraScrollSpeedMax, self.mood.excitement) * dt
+	local currentCameraSpeed = math.linearInterpolate(Config.cameraScrollSpeedMin, Config.cameraScrollSpeedMax, self.mood.excitement)
+	self.camera.x = self.camera.x + currentCameraSpeed * dt
 	
 	-- shake camera
 	self.camera.y = math.sin(love.timer.getTime() * Config.cameraShakeSpeed) * Config.cameraShakeAmplitude
+	
+	-- text blocks
+	local cameraSpeedIncrement = (currentCameraSpeed - Config.cameraScrollSpeedMin) / (Config.cameraScrollSpeedMax - Config.cameraScrollSpeedMin)
+	for key, tblock in ipairs(self.textBlocks) do
+		tblock:update(dt, cameraSpeedIncrement)
+		if tblock:getNeedsDispose() then
+			table.remove(self.textBlocks, key)
+		end
+	end
 	
 	-- update sound crossfade
 	--self.soundtrack:updateCrossfade(self.mood.excitement)
