@@ -23,16 +23,22 @@ function TextBlock.new(options)
 end
 
 function TextBlock:update(dt, cameraSpeedInc)
+	
+	-- updates current time
 	self.currentTime = self.currentTime + dt
+	
+	-- smoothes cameraSpeedInc: x^2
+	cameraSpeedInc = cameraSpeedInc * cameraSpeedInc
 	
 	-- interpolation from spawnPos to anchorPos
 	local spawnTime = math.abs(self.currentTime / Config.textBlockSpawnDuration)
 	if spawnTime >= 0 and spawnTime <= 1 then
 		self.pos = self.spawnPos:linearInterpolate(self.anchorPos, spawnTime)
 	
-	-- text block idle oscillation function of the camera speed
+	-- text block position: scroll and shake
 	elseif spawnTime > 1 and not self.needsDispose then
 		self.pos.x = self.pos.x + cameraSpeedInc * Config.textBlockScrollSpeedAdjustmentMax
+		self.pos.y = self.anchorPos.y +  Config.textBlockShakeAmplitudeMax * math.sin(self.currentTime * Config.textBlockShakeSpeed)
 	end
 	
 	-- does the block need to say good bye?
