@@ -47,7 +47,7 @@ function GameOverScene.new(options)
     return self
 end
 
-function GameOverScene:initFromGameOutcome(options)
+function GameOverScene:initFromGameOutcome(options)	
 	-- find out how well the player has matched the seduction pattern
 	local patternScore = self:getPatternFit(options.mood.pSampleAnalysisHistory)
 	
@@ -57,9 +57,7 @@ function GameOverScene:initFromGameOutcome(options)
 	local isPositive = false
 	
 	self.patternScore = math.round(patternScore * 100, 1)
-	if patternScore >= 1 and not options.isPlayerFault then
-		self.patternUnlocked = true
-	end
+	self.patternUnlocked = patternScore >= 1 and not options.isPlayerFault
 	
 	if self.patternUnlocked or options.score >= 25 then
 		isBest = true
