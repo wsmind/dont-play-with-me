@@ -37,6 +37,9 @@ function checkMuseumMode(arg)
 		Config.quitEnabled = false
 		Config.inacTimerEnabled = true
 		
+		-- hides mouse
+		love.mouse.setVisible(false)
+		
 		-- check if fullscreen is needed
 		bootConf = {screen = {}, modules = {}}
 		love.conf(bootConf)
