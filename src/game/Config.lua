@@ -63,6 +63,9 @@ Config = {
 	soundFadeDuration = 8,
 
 	-- Inactivity timer
-	inacTimerOn = false,
-	inacTimerStart = 30 -- How long the game needs to be inactive before it is reset, in seconds
+	inacTimerEnabled = false,
+	inacTimerStart = 30, -- How long the game needs to be inactive before it is reset, in seconds
+	
+	-- Misc UI
+	quitEnabled = true, -- If it is possible to quit the game using Esc.
 }

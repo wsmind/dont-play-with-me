@@ -3,9 +3,48 @@ require("game.Game")
 require("game.IntroScene")
 require("game.GameOverScene")
 require("game.LoaderSplashScene")
+require("game.Config")
+require("conf")
 
-function love.load()
+function love.load(arg)
+	-- special "museum" mode?
+	checkMuseumMode(arg)
+	
+	-- starts loading the game
 	loader = LoaderSplashScene.new{}
+end
+
+function checkMuseumMode(arg)
+	local museumMode = false
+	
+	if arg then
+		for k,v in pairs(arg) do
+			print(k .. " " .. v)
+			if v == "--museum" then
+				museumMode = true
+				break
+			end
+		end
+	else
+		print("No argument table received.")
+	end
+	
+	if museumMode then
+		-- no quit, fullscreen, inactivity monitoring on; overrides settings
+		print("Museum mode ON, overrides settings.")
+		
+		-- sets custom config variables
+		Config.quitEnabled = false
+		Config.inacTimerEnabled = true
+		
+		-- check if fullscreen is needed
+		bootConf = {screen = {}, modules = {}}
+		love.conf(bootConf)
+		if not bootConf.screen.fullscreen then
+			love.graphics.toggleFullscreen()
+		end
+		
+	end
 end
 
 function love.mousepressed(x, y, button)
@@ -15,7 +54,7 @@ function love.mousereleased(x, y, button)
 end
 
 function love.keypressed(key, unicode)
-	if key == "escape" then
+	if Config.quitEnabled and key == "escape" then
 		love.event.push("quit")
 	elseif loader.complete == false then
 		loader:keyPressed(key, unicode)

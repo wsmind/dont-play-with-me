@@ -228,7 +228,7 @@ function GameOverScene:update(dt)
 	self.elapsedInactivityTime = self.elapsedInactivityTime + dt
 	
 	-- check inactivity
-	if Config.inacTimerOn and self.elapsedInactivityTime > Config.inacTimerStart then
+	if Config.inacTimerEnabled and self.elapsedInactivityTime > Config.inacTimerStart then
 		-- reset to intro
 		self.active = false
 		
