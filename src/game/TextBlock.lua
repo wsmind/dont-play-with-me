@@ -37,7 +37,7 @@ function TextBlock:update(dt, cameraSpeedInc)
 	
 	-- text block position: scroll and shake
 	elseif spawnTime > 1 and not self.needsDispose then
-		self.pos.x = self.pos.x + cameraSpeedInc * Config.textBlockScrollSpeedAdjustmentMax
+		self.pos.x = self.pos.x + cameraSpeedInc * Config.textBlockScrollSpeedAdjustmentMax * dt
 		self.pos.y = self.anchorPos.y +  Config.textBlockShakeAmplitudeMax * math.sin(self.currentTime * Config.textBlockShakeSpeed)
 	end
 	

@@ -17,9 +17,9 @@ Config = {
 	levelDuration = 60,
 	
 	-- Text blocks
-	textBlockDurationOnScreen = 7, -- in seconds
+	textBlockDurationOnScreen = 8, -- in seconds
 	textBlockSpawnDuration = 0.5, -- in seconds
-	textBlockScrollSpeedAdjustmentMax = 7, -- in pixel/s, maximum adjustment speed to give to text blocks when the camera is at its maximum speed
+	textBlockScrollSpeedAdjustmentMax = 400, -- in pixel/s, maximum adjustment speed to give to text blocks when the camera is at its maximum speed
 	textBlockShakeAmplitudeMax = 10,
 	textBlockShakeSpeed = 3,
 	
